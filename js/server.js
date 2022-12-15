@@ -79,16 +79,16 @@ http.createServer((request, response) => {
         if (err){
             throw err;
         }
-    })
-
     // response is to write a header 
-    response.writeHead(200, {'Content-Type': 'text/plain'}); 
+    response.writeHead(200, {'Content-Type': 'text/html'}); 
     // repsone to write the data in the file
     response.write(data);
     // response is empty to allow for the contents of files to be displayed
     response.end();
     // server set to listen for request on port 8080 (standard port for http)
-}).listen(8080);
+    })
+
+    
 
 console.log('My first Node test server is running on Port 8080.');
 
