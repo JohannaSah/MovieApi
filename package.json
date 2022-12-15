@@ -1,5 +1,5 @@
 {
-  "name": "movieApi",
+  "name": "ApiMovie",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -19,5 +19,8 @@
   "homepage": "https://github.com/JohannaSah/myMovieApi#readme",
   "dependencies": {
     "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "eslint": "^8.29.0"
   }
 }
