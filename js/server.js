@@ -86,8 +86,7 @@ http.createServer((request, response) => {
     // response is empty to allow for the contents of files to be displayed
     response.end();
     // server set to listen for request on port 8080 (standard port for http)
-    })
-
+    }).listen(8080);
     
 
 console.log('My first Node test server is running on Port 8080.');
