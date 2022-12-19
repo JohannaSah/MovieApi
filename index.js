@@ -1,17 +1,22 @@
 
-// import express and morgan modules into the package:
+// import express, morgan, fs and path modules into the package:
 const express = require('express')
-    morgan = require('morgan');
+    morgan = require('morgan'),
+    fs = require('fs'),
+    path = require('path');
+
 // declare variable that encapsulates Express functionality to configure web server:
 // variable then used to route HTTP requests and responses
 const app = express();
 
+// create a write stream in append mode for log.txt file in root directory#
+const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {flags: 'a'});
+
 // by invoking app.use() before app.get() you designate that the specified functions are called with every request (middleware)
 // pass morgan into the app.use() 
 // morgan is a preexisting library to be used as logging middleware
-// common parameter specifies, that morgan should be logged using Morgan'S "common" format
-// which logs basic data such as IP adress, time of request, request method and path, and status code
-app.use(morgan('common'));
+// set up the logger
+app.use(morgan('combined', {stream: accessLogStream}));
 
 // GET requests which define the different URLs that requests can be sent to and the associated response
 // get simply retrieves data from server
