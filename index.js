@@ -12,7 +12,54 @@ const app = express();
 // create a write stream in append mode for log.txt file in root directory#
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {flags: 'a'});
 
+// array of movies and their directors
+let topMovies = [
+    {
+        title: "Perks of being a Wallflower",
+       director: "Tom Hooper",
+    },
+    {
+      title: "The Intouchables",
+      director: "Olivier Nakache & Éric Toledano",
+    },
+    {
+      title: "Goodbye Lenin",
+      director: "Wolfgang Becker",
+    },
+    {
+      title: "Dead Poets Society",
+      director: "Peter Weir",
+    },
+    {
+      title: "Life is beautiful",
+      director: "Roberto Benigni",
+    },
+    {
+      title: "Im Labyrinth des Schweigens",
+      director: "Giulio Ricciarelli",
+    },
+    {
+      title: "What dreams may come",
+      director: "Vincent Ward",
+    },
+    {
+      title: "Schindler's List",
+      director: "Steven Spielberg",
+    },
+    {
+      title: "Forrest Gump",
+      director: "Robert Zemeckis",
+    },
+    {
+      title: "The Chorus",
+      director: "Christophe Barratier",
+    },
+]
+
 // by invoking app.use() before app.get() you designate that the specified functions are called with every request (middleware)
+// The following function automatically routes all requests for static files to their corresponding files within the public folder on the server
+app.use(express.static('public'));
+
 // pass morgan into the app.use() 
 // morgan is a preexisting library to be used as logging middleware
 // set up the logger
