@@ -67,13 +67,22 @@ app.use(morgan('combined', {stream: accessLogStream}));
 
 // GET requests which define the different URLs that requests can be sent to and the associated response
 // get simply retrieves data from server
-// app is and instance of express() as defined as a variable above
+// app is an instance of express() as defined as a variable above
 app.get ('/', (req, res) => {
-    res.send('Welcome to my app!');
+    res.send('Welcome to my Movie app!');
 });
 
-app.get('/secreturl', (req, res) => {
-    res.send('This is a secret url with super top-secret content.');
+app.get('/movies', (req, res) => {
+    res.json('topMovies');
+});
+
+app.get('/documentation', (req, res) => {
+    res.sendFile('public/documentation.html', {root: __dirname});
+});
+
+app.use((err, req, res, next) => {
+    console.log('err.stack');
+    res.status(500).send('Something went wrong, please return later');
 });
 
 app.listen(8080, () => {
