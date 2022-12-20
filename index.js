@@ -63,7 +63,7 @@ app.use(express.static('public'));
 // pass morgan into the app.use() 
 // morgan is a preexisting library to be used as logging middleware
 // set up the logger
-app.use(morgan('combined', {stream: accessLogStream}));
+app.use(morgan('combined'));
 
 // GET requests which define the different URLs that requests can be sent to and the associated response
 // get simply retrieves data from server
@@ -73,7 +73,7 @@ app.get ('/', (req, res) => {
 });
 
 app.get('/movies', (req, res) => {
-    res.json('topMovies');
+    res.json(topMovies);
 });
 
 app.get('/documentation', (req, res) => {
