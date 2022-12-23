@@ -52,10 +52,132 @@
             </li>
         </ul>
 
-    </div> 
+    </div>
 
+    <h2> API endpoints </h2>
 
-    
-</body>
+    <table>
+        <thead>
+            <tr>
+                <th>Business logic</th>
+                <th>URL</th>
+                <th>HTTP method</th>
+                <th>Query Parameters</th>
+                <th>Request body data format</th>
+                <th>Repsonse body data format</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>Allow existing users log in</td>
+                <td>/login</td>
+                <td>POST</td>
+                <td>-</td>
+                <td>-</td>
+                <td>A JSON object holding data about the user including the hashed password</td>
+            </tr>
+ 
+            <tr>
+                <td>Get a list of all movies</td>
+                <td>/movies</td>
+                <td>GET</td>
+                <td>-</td>
+                <td>-</td>
+                <td>A JSON object holding data about all the movies</td>
+            </tr>
+ 
+            <tr>
+                <td>Get a specific movie by title</td>
+                <td>/movies/:title</td>
+                <td>GET</td>
+                <td>:title</td>
+                <td>-</td>
+                <td>A JSON object holding data about a single movie</td>
+            </tr>
+ 
+            <tr>
+                <td>Get genre by name</td>
+                <td>/movies/genre/:Name</td>
+                <td>GET</td>
+                <td>:Name</td>
+                <td>-</td>
+                <td>A JSON object holding data about the genre of a movie</td>
+            </tr>
+ 
+            <tr>
+                <td>Get director data by name</td>
+                <td>/movies/director/:Name</td>
+                <td>GET</td>
+                <td>:Name</td>
+                <td>-</td>
+                <td>A JSON object holding data about the data of a director</td>
+            </tr>
+ 
+            <tr>
+                <td>Get all users</td>
+                <td>/users</td>
+                <td>GET</td>
+                <td>-</td>
+                <td>-</td>
+                <td> A JSON object holding data of all users</td>
+            </tr>
+ 
+            <tr>
+                <td>Get a user by username</td>
+                <td>/users/:Username</td>
+                <td>GET</td>
+                <td>-</td>
+                <td>-</td>
+                <td> A JSON object holding data of a specific user</td>
+            </tr>
+ 
+            <tr>
+                <td>Allow new users to register</td>
+                <td>/users</td>
+                <td>POST</td>
+                <td>-</td>
+                <td>A JSON object holding data about the users to add, structured like this { "name": "xxx", "id": "xxx", "favoriteMovie": "xxx" } </td>
+                <td>A JSON object holding data about the user that was added, structured like this { "name": "xxx", "id": "xxx", "favoriteMovie": "xxx" } </td>
+            </tr>
+ 
+            <tr>
+                <td>Allow new users update their user info</td>
+                <td>/users/:Username</td>
+                <td>PUT</td>
+                <td>:Username</td>
+                <td>-</td>
+                <td>A JSON object holding data about the updated information</td>
+            </tr>
+ 
+            <tr>
+                <td>Add movie to favorite list</td>
+                <td>/users/:Username/movies/:MovieID</td>
+                <td>POST</td>
+                <td>:Username, :MovieID</td>
+                <td>-</td>
+                <td>A JSON Object holding data about the User and the movie that was added</td>
+            </tr>
+ 
+            <tr>
+                <td>Delete movie from favorite list</td>
+                <td>/users/:Username/movies/:MovieID</td>
+                <td>DELETE</td>
+                <td>:Username, :MovieID</td>
+                <td>-</td>
+                <td>A JSON Object holding data about the User and the movie that was removed</td>
+            </tr>
+ 
+            <tr>
+                <td>Allow existing users to deregister</td>
+                <td>/users/:Username</td>
+                <td>DELETE</td>
+                <td>:Username</td>
+                <td>-</td>
+                <td>A text message indicating whether the User has deregistered</td>
+            </tr>
+        </tbody>
+        
+    </table>
 
 </html>
