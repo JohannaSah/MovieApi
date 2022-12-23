@@ -144,11 +144,65 @@ let movies = [
     }
 ]
 
+// Create 
+
+// -> Allow new users to register;
+app.post('/users', (req, res) => {
+    const newUser = req.body;
+
+    if (newUser.name) {
+        newUser.is = uuid.v4();
+        users.push(newUser);
+        res.status(201).json(newUser)
+    }
+    else {
+        res.status(400).send('users need names');
+    }
+})
+
+// -> Allow users to add a movie to their list of favorites (showing only a text that a movie has been added—more on this later);
+app.post('/users/:id/:movieTitle', (req, res) => {
+    const { id, movieTitle }  = req.params;
+
+    let user = users.find( user => user.id == id);
+
+    if (user) {
+        user.favoriteMovies.push(movieTitle);
+        res.status(201).send(`${movieTitle} has been added to user ${id}'s array`);;
+    }
+    else {
+        res.status(400).send('users need names');
+    }
+})
+
+
+// UPDATE
+
+// -> Allow users to update their user info (username);
+app.put('/users/:id', (req, res) => {
+    const { id }  = req.params;
+    const updatedUSer = req.body;
+
+   let user = users.find(user => user.id == id); // use == instead of === as id values are mixed strings and numbers and === only allows for exact matches
+
+   if(user) {
+    user.name = updatedUSer.name;
+    res.status(200).json(user);
+   }
+   else {
+    res.status(400).send('no such user');
+   }
+})
+
+
 // READ endpoints
+
+// -> Return a list of ALL movies to the user;
 app.get('/movies', (req, res) => {
     res.status(200).json(movies);
 })
 
+// -> Return data (description, genre, director, image URL, whether it’s featured or not) about a single movie by title to the user;
 app.get('/movies/:title', (req, res) => {
     // const title = req.params.title;
     const { title }  = req.params; // object destructuring same as line above
@@ -162,6 +216,7 @@ app.get('/movies/:title', (req, res) => {
     }
 })
 
+// -> Return data about a genre (description) by name/title (e.g., “Thriller”);
 app.get('/movies/genre/:genreName', (req, res) => {
     const { genreName}  = req.params; // object destructuring same as line above
     const genre = movies.find(movie => movie.Genre.Name === genreName ).Genre;
@@ -174,6 +229,18 @@ app.get('/movies/genre/:genreName', (req, res) => {
     }
 })
 
+// -> Return data about a director (bio, birth year, death year) by name;
+app.get('/movies/directors/:directorName', (req, res) => {
+    const { directorName}  = req.params; // object destructuring same as line above
+    const director = movies.find(movie => movie.Director.Name === directorName ).Director;
+
+    if (director) {
+        res.status(200).json(director);
+    }
+    else {
+        res.status(400).send('No such director');
+    }
+})
 
 
 
