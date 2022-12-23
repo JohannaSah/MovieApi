@@ -29,7 +29,8 @@ let movies = [
         },
         Description: "An introvert freshman is taken under the wings of two seniors who welcome him to the real world.",
         Genre: {
-            Types: "Drama",
+            Name: "Drama",
+            Description: "In film and television, drama is a category or genre of narrative fiction (or semi-fiction) intended to be more serious than humorous in tone.",
         },
         imageUrl: "https://www.imdb.com/title/tt1659337/mediaviewer/rm2134748161/?ref_=tt_ov_i",
 
@@ -45,7 +46,8 @@ let movies = [
          },
         Description: "After he becomes a quadriplegic from a paragliding accident, an aristocrat hires a young man from the projects to be his caregiver. ",
         Genre: {
-            Types:"Biography, Comedy & Drama",
+            Name:"Biography",
+            Description: "A biographical film or biopic  is a film that dramatizes the life of a non-fictional or historically-based person or people. Such films show the life of a historical person and the central character's real name is used.[2] They differ from docudrama films and historical drama films in that they attempt to comprehensively tell a single person's life story or at least the most historically important years of their lives.",
         },
         imageUrl: "https://www.imdb.com/title/tt1675434/mediaviewer/rm1305720576/?ref_=tt_ov_i",
     },
@@ -59,7 +61,8 @@ let movies = [
          },
         Description: "In 1990, to protect his fragile mother from a fatal shock after a long coma, a young man must keep her from learning that her beloved nation of East Germany as she knew it has disappeared.",
         Genre: {
-            Types:"Comedy, Drama & Romance",
+            Name:"Comedy",
+            Description: "A comedy film is a category of film which emphasizes humor.[1] These films are designed to make the audience laugh through amusement.[2] Films in this style traditionally have a happy ending (black comedy being an exception).",
         },
         imageUrl: "https://www.imdb.com/title/tt0301357/mediaviewer/rm802921728/?ref_=tt_ov_i",
     },
@@ -73,7 +76,8 @@ let movies = [
          },
         Description: "Maverick teacher John Keating uses poetry to embolden his boarding school students to new heights of self-expression.",
         Genre: {
-            Types:"Comedy & Drama",
+            Name:"Drama",
+            Description: "In film and television, drama is a category or genre of narrative fiction (or semi-fiction) intended to be more serious than humorous in tone.",
         },
         imageUrl: "https://www.imdb.com/title/tt0097165/mediaviewer/rm1115750912/?ref_=tt_ov_i",
     },
@@ -87,7 +91,8 @@ let movies = [
          },
         Description: "When an open-minded Jewish waiter and his son become victims of the Holocaust, he uses a perfect mixture of will, humor, and imagination to protect his son from the dangers around their camp.",
         Genre: {
-            Types:"Comedy, Drama & Romance",
+            Name:"Drama",
+            Description: "In film and television, drama is a category or genre of narrative fiction (or semi-fiction) intended to be more serious than humorous in tone.",
         },
         imageUrl: "https://www.imdb.com/title/tt0118799/mediaviewer/rm2303464448/?ref_=tt_ov_i ",
 
@@ -102,7 +107,8 @@ let movies = [
          },
         Description: "A story that exposes the conspiracy of prominent German institutions and government branches to cover up the crimes of Nazis during World War II. ",
         Genre: {
-            Types:"Drama & History ",
+            Name:"Drama",
+            Description: "In film and television, drama is a category or genre of narrative fiction (or semi-fiction) intended to be more serious than humorous in tone.",
         },
         imageUrl: "https://www.imdb.com/title/tt3825638/mediaviewer/rm1884423936/?ref_=tt_ov_i",
     },
@@ -116,7 +122,8 @@ let movies = [
          },
         Description: "Chris Nielsen dies in an accident, and enters Heaven. But when he discovers that his beloved wife Annie has killed herself out of grief over the loss, he embarks on an afterlife adventure to reunite with her.",
         Genre: {
-            Types:"Drama, Fantasy & Romance ",
+            Name:"Drama",
+            Description: "In film and television, drama is a category or genre of narrative fiction (or semi-fiction) intended to be more serious than humorous in tone.",
         },
         imageUrl: "https://www.imdb.com/title/tt0120889/mediaviewer/rm11484160/?ref_=tt_ov_i ",
     },
@@ -130,7 +137,8 @@ let movies = [
          },
         Description: "In German-occupied Poland during World War II, industrialist Oskar Schindler gradually becomes concerned for his Jewish workforce after witnessing their persecution by the Nazis. ",
         Genre: {
-            Types:"Biography, Drama & History",
+            Name:"Biography",
+            Description: "A biographical film or biopic  is a film that dramatizes the life of a non-fictional or historically-based person or people. Such films show the life of a historical person and the central character's real name is used.[2] They differ from docudrama films and historical drama films in that they attempt to comprehensively tell a single person's life story or at least the most historically important years of their lives.",
         },
         imageUrl: "https://www.imdb.com/title/tt0108052/mediaviewer/rm1610023168/?ref_=tt_ov_i ",
     }
@@ -154,15 +162,15 @@ app.get('/movies/:title', (req, res) => {
     }
 })
 
-app.get('/movies/genre/:type', (req, res) => {
-    const { genreType }  = req.params; // object destructuring same as line above
-    const movie = movies.find(movie => movie.Genre.Types === genreType );
+app.get('/movies/genre/:genreName', (req, res) => {
+    const { genreName}  = req.params; // object destructuring same as line above
+    const genre = movies.find(movie => movie.Genre.Name === genreName ).Genre;
 
     if (genre) {
         res.status(200).json(genre);
     }
     else {
-        res.status(400).send('This movie has no assigned genre');
+        res.status(400).send('No such genre');
     }
 })
 
