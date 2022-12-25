@@ -22,7 +22,7 @@ let movies = [
     {
         Title: "Perks of being a Wallflower",
         Director: {
-            Name: "Tom Hooper",
+            Name: "Stephen Chbosky",
             Bio: "Stephen Chbosky was born on January 25, 1970 in Pittsburgh, Pennsylvania, USA. He is a writer and producer, known for The Perks of Being a Wallflower (2012), Beauty and the Beast (2017) and Wonder (2017). He has been married to Liz Maccie since September 18, 2010. They have two children. ",
             YearOfBirth: "1970",
             YearOfDeath: "",
@@ -198,7 +198,7 @@ app.put('/users/:id', (req, res) => {
 // READ endpoints
 
 // render documentation file
-pp.get('/documentation', (req, res) => {
+app.get('/documentation', (req, res) => {
     res.sendFile('public/documentation.html', {root: __dirname});
 });
 
