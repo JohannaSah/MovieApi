@@ -197,6 +197,11 @@ app.put('/users/:id', (req, res) => {
 
 // READ endpoints
 
+// render documentation file
+pp.get('/documentation', (req, res) => {
+    res.sendFile('public/documentation.html', {root: __dirname});
+});
+
 // -> Return a list of ALL movies to the user;
 app.get('/movies', (req, res) => {
     res.status(200).json(movies);
