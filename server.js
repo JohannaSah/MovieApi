@@ -279,4 +279,4 @@ app.delete('/users/:id', (req, res) => {
     }
 })
 
-app.listen(8080, () => console.log{"Listening on 8080"});
+app.listen(8080, () => console.log("Listening on 8080"));
