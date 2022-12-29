@@ -154,18 +154,44 @@ let movies = [
 // Create 
 
 // -> Allow new users to register;
+/* We’ll expect JSON in this format
+{
+  ID: Integer,
+  Username: String,
+  Password: String,
+  Email: String,
+  Birthday: Date
+}*/
+// first check if username already exists using findOne command
+// if it doesn't exist create a new user
+// then callback function that takes newly created document as parameter which responds feedback of completed new user
+// error handling functions
 app.post('/users', (req, res) => {
-    const newUser = req.body;
-
-    if (newUser.name) {
-        newUser.is = uuid.v4();
-        users.push(newUser);
-        res.status(201).json(newUser)
-    }
-    else {
-        res.status(400).send('users need names');
-    }
-})
+    Users.findOne({ Username: req.body.Username })
+        .then((user) => {
+            if (user) {
+                return res.status(400.send(req.body.Userame + ' already exists');) 
+            }
+            else {
+                Users
+                    .create({
+                        Username: req.body.Username,
+                        Password: req.body.Password,
+                        Email: req.body.Email,
+                        Birthday: req.body.Birthday
+                    })
+                    .then((user) => {res.status(201).json(user)})
+                .catch((error) => {
+                    console.error(error);
+                    res.status(500).send('Error: ' + error);
+                })
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).send('Error: ' + error);
+        });        
+});
 
 // -> Allow users to add a movie to their list of favorites (showing only a text that a movie has been added—more on this later);
 app.post('/users/:id/:movieTitle', (req, res) => {
