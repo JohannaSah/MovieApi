@@ -292,6 +292,17 @@ app.get('/users', (req, res) => {
     });
 })
 
+// -> return data about specific user via username
+app.get('/users/:Username', (req, res) => {
+    Users.findOne({ Userame: req.params.Username})
+    .then((user) => {
+        res.json(user);
+    })
+    .catch((err) => {
+        res.status(500).send('Error: ' + err);
+    })
+})
+
 // DELETE
 
 // -> Allow users to remove a movie from their list of favorites;
