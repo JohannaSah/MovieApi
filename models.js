@@ -2,7 +2,7 @@
 // import mongoose package to work with it
 const mongoose = require('mongoose');
 
-// Schemas
+/* // Schemas
 // Schemas can contain
 // - key:value pairs
 // - key:{type: datatype, required: true} if sth is mandatory
@@ -11,8 +11,9 @@ const mongoose = require('mongoose');
 // - References using ref attribute (see FavoriteMovies)
 // - mongoose .populate method (see FavoriteMovies), way to populate one collection with an array of embedded documents from another collection
 
+*/
 // define movieSchema
-let movieSchema = mongooose.Schema({ 
+let movieSchema = mongoose.Schema({ 
     Title: {type: String, required: true},
     Description: { type: String, required: true},
     Genre: {
