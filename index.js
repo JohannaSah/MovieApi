@@ -280,6 +280,18 @@ app.get('/movies/directors/:directorName', (req, res) => {
     }
 })
 
+// -> return data on all users
+app.get('/users', (req, res) => {
+    Users.find()
+    .then((users) => {
+        res.status(201).json(users);
+    })
+    .catch((err) => {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+    });
+})
+
 // DELETE
 
 // -> Allow users to remove a movie from their list of favorites;
