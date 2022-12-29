@@ -1,5 +1,5 @@
-const { default: mongoose } = require('mongoose');
-const mogoose = require('mongoose');
+
+const mongoose = require('mongoose');
 
 let movieSchema = mogooose.Schema({ 
     Title: {type: String, required: true},
