@@ -1,7 +1,11 @@
 const express = require('express'),
     app = express(),
     bodyParser = require('body-parser'),
-    uuid = require('uuid');
+    uuid = require('uuid'),
+    mongoose = require('mongoose'),
+    Models = require('./models.js'),
+    Movies = Models.Movie,
+    Users = Models.User;
 
 app.use(bodyParser.json());
 
