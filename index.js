@@ -9,6 +9,8 @@ const express = require('express'),
 
 app.use(bodyParser.json());
 
+mongoose.connect('mongodb://localhost:27017/myFlixDataBase', {useNewUrlParser: true, useUnifiedTopology: true});
+
 let users = [ 
     {
         id: 1, 
