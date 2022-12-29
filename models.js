@@ -12,7 +12,7 @@ const mongoose = require('mongoose');
 // - mongoose .populate method (see FavoriteMovies), way to populate one collection with an array of embedded documents from another collection
 
 // define movieSchema
-let movieSchema = mogooose.Schema({ 
+let movieSchema = mongooose.Schema({ 
     Title: {type: String, required: true},
     Description: { type: String, required: true},
     Genre: {
