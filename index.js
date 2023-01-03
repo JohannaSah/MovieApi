@@ -307,8 +307,8 @@ app.get('/documentation', (req, res) => {
 app.get('/movies', (req, res) => {
     console.log('get movies has been called');
     Movies.find()
-        .then((Movies) => {
-            res.status(201).json(Movies);
+        .then((movies) => {
+            res.status(201).json(movies);
         })
         .catch((err) => {
             console.log(err);
