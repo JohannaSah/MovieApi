@@ -194,19 +194,20 @@ app.post('/users', (req, res) => {
 });
 
 // -> Allow users to add a movie to their list of favorites (showing only a text that a movie has been added—more on this later);
-app.post('/users/:id/:movieTitle', (req, res) => {
-    const { id, movieTitle }  = req.params;
-
-    let user = Users.find( user => User.id == id);
-
-    if (user) {
-        user.FavoriteMovies.push(movieTitle);
-        res.status(201).send(`${movieTitle} has been added to user ${id}'s array`);;
-    }
-    else {
-        res.status(400).send('users need names');
-    }
-})
+app.post('/users/:Username/movies/:MovieID', (req, res) => {
+    Users.findOneAndUpdate({ Username: req.params.Username }, {
+       $push: { FavoriteMovies: req.params.MovieID }
+     },
+     { new: true }, // This line makes sure that the updated document is returned
+    (err, updatedUser) => {
+      if (err) {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+      } else {
+        res.json(updatedUser);
+      }
+    });
+  });
 
 
 // UPDATE
