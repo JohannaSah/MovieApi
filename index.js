@@ -197,10 +197,10 @@ app.post('/users', (req, res) => {
 app.post('/users/:id/:movieTitle', (req, res) => {
     const { id, movieTitle }  = req.params;
 
-    let user = users.find( user => user.id == id);
+    let user = Users.find( user => User.id == id);
 
     if (user) {
-        user.favoriteMovies.push(movieTitle);
+        user.FavoriteMovies.push(movieTitle);
         res.status(201).send(`${movieTitle} has been added to user ${id}'s array`);;
     }
     else {
@@ -216,10 +216,10 @@ app.put('/users/:id', (req, res) => {
     const { id }  = req.params;
     const updatedUSer = req.body;
 
-   let user = users.find(user => user.id == id); // use == instead of === as id values are mixed strings and numbers and === only allows for exact matches
+   let user = Users.find(user => User.id == id); // use == instead of === as id values are mixed strings and numbers and === only allows for exact matches
 
    if(user) {
-    user.name = updatedUSer.name;
+    user.name = updatedUser.name;
     res.status(200).json(user);
    }
    else {
