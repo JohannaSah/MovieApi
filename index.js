@@ -9,10 +9,12 @@ const express = require('express'),
     Genres = Models.Genres,
     Directors = Models.Directors;
 
+    console.log(Models);
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-mongoose.connect('mongodb://localhost:27017/myFlixDataBase', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect('mongodb://localhost:27017/myFlixDataBase', {useNewUrlParser: true, useUnifiedTopology: true}).then( () => console.log('database is connected'));
 
 // let users = [ 
 //     {
@@ -304,17 +306,24 @@ app.get('/documentation', (req, res) => {
 });
 
 // -> Return a list of ALL movies to the user;
-app.get('/movies', (req, res) => {
-    console.log('movies has been called');
-    Movies.find()
-        .then((movies) => {
-            res.status(201).json(movies);
-        })
-        .catch((err) => {
-            console.log(err);
-            res.status(500).send('Error: ' + err);
-        });
-})
+// app.get('/movies', (req, res) => {
+//     console.log('movies has been called');
+//     Movies.find()
+//         .then((movies) => {
+//             res.status(201).json(movies);
+//         })
+//         .catch((err) => {
+//             console.log(err);
+//             res.status(500).send('Error: ' + err);
+//         });
+// })
+app.get('/movies', async (req, res) => {
+    try{
+    const movies = await Movies.find({});
+    res.status(200).json({movies}); 
+    }catch(error){
+    res.status(500).json({message: error?.message})}
+    });
 
 // -> Return data (description, genre, director, image URL, whether it’s featured or not) about a single movie by title to the user;
 app.get('/movies/:Title', (req, res) => {
