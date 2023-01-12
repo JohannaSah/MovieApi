@@ -354,6 +354,7 @@ app.get('/movies/directors/:directorName', (req, res) => {
 
 // -> return data on all users
 app.get('/users', (req, res) => {
+    console.log('get users has been called');
     Users.find()
     .then((Users) => {
         res.status(201).json(Users);
