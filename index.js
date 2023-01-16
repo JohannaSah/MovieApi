@@ -234,9 +234,10 @@ app.get('/users', passport.authenticate('jwt', {session: false}), (req, res) => 
 
 // -> return data about specific user via username
 app.get('/users/:Username', passport.authenticate('jwt', {session: false}), (req, res) => {
-    Users.findOne({ Userame: req.params.Username})
-    .then((User) => {
-        res.json(User);
+    console.log(req.params.Username);
+    Users.findOne({ Username: req.params.Username})
+    .then((user) => {
+        res.json(user);
     })
     .catch((err) => {
         res.status(500).send('Error: ' + err);
