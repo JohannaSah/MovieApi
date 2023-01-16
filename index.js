@@ -169,25 +169,17 @@ app.get('/documentation', (req, res) => {
 });
 
 // -> Return a list of ALL movies to the user;
-// app.get('/movies', (req, res) => {
-//     console.log('movies has been called');
-//     Movies.find()
-//         .then((movies) => {
-//             res.status(201).json(movies);
-//         })
-//         .catch((err) => {
-//             console.log(err);
-//             res.status(500).send('Error: ' + err);
-//         });
-// })
-app.get('/movies', async (req, res) => {
-    try{
-    const movies = await Movies.find();
-    console.log(movies)
-    res.status(200).json({movies}); 
-    }catch(error){
-    res.status(500).json({message: error?.message})}
-    });
+app.get('/movies', (req, res) => {
+    console.log('movies has been called');
+    Movies.find()
+        .then((movies) => {
+            res.status(201).json(movies);
+        })
+        .catch((err) => {
+            console.log(err);
+            res.status(500).send('Error: ' + err);
+        });
+});
 
 // -> Return data (description, genre, director, image URL, whether it’s featured or not) about a single movie by title to the user;
 app.get('/movies/:Title', (req, res) => {
