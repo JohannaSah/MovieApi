@@ -12,6 +12,10 @@ const express = require('express'),
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+let auth = require('./auth')(app); // (app) ensures, that Express is available in auth.js file as well
+const passport = require('passport'); // require passport module
+require('./passport'); // import passport.js file
+
 mongoose.connect('mongodb://localhost:27017/myFlixDataBase', {useNewUrlParser: true, useUnifiedTopology: true}).then( () => console.log('database is connected'));
 
 // Create 
