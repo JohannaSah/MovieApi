@@ -9,8 +9,6 @@ const express = require('express'),
     Genres = Models.Genres,
     Directors = Models.Directors;
 
-    console.log(Models);
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -319,7 +317,8 @@ app.get('/documentation', (req, res) => {
 // })
 app.get('/movies', async (req, res) => {
     try{
-    const movies = await Movies.find({});
+    const movies = await Movies.find();
+    console.log(movies)
     res.status(200).json({movies}); 
     }catch(error){
     res.status(500).json({message: error?.message})}
