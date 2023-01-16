@@ -28,7 +28,7 @@ module.exports = (router) => {
                     res.send(error);
                 }
                 let token = generateJWTToken(user.toJSON());
-                return res.json({user, token});
+                return res.json({user, token}); // E6 shorthand for res.json({user: user, token: token}), when key = values it can be shortened in E6
             });
         }) 
         (req, res);
