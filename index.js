@@ -34,7 +34,8 @@ mongoose.connect('mongodb://localhost:27017/myFlixDataBase', {useNewUrlParser: t
 // if it doesn't exist create a new user
 // then callback function that takes newly created document as parameter which responds feedback of completed new user
 // error handling functions
-app.post('/users', passport.authenticate('jwt', {session: false}), (req, res) => {
+// no authentication as anonymous users need to be able to register as new users
+app.post('/users', (req, res) => {
     Users.findOne({ Username: req.body.Username })
         .then((user) => {
             if (user) {
