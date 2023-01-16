@@ -29,7 +29,7 @@ passport.use(new LocalStrategy({
     }
 ));
 
-passport.use(new.JWTStrategy({
+passport.use(new JWTStrategy({
     jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
     secretOrKey: 'your_jwt_secret'
     },
