@@ -29,7 +29,7 @@ let movieSchema = mongoose.Schema({
     Actors: [String],
     ImagePath: String,
     Featured: Boolean
-});
+}, { collection : 'Movies' });
 
 // define userSchema
 let userSchema = mongoose.Schema({
@@ -38,7 +38,7 @@ let userSchema = mongoose.Schema({
     Email: {type: String, required: true},
     Birthday: Date,
     FavoriteMovies: [{type: mongoose.Schema.Types.ObjectId, ref: 'Movie'}]
-});
+}, { collection : 'Users'});
 
 // create models
 // use the defined Schemas to create collections called db.movies and db.users (everything is pluralized and lowercaed automatically)
