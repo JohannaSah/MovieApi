@@ -183,6 +183,7 @@ app.get('/movies', passport.authenticate('jwt', {session: false}), (req, res) =>
 
 // -> Return data (description, genre, director, image URL, whether it’s featured or not) about a single movie by title to the user;
 app.get('/movies/:Title', (req, res) => {
+    console.log('specific movie has been called');
     Movies.findOne({ Title: req.params.Title })
         .then((movie) => {
             res.json(movie);
