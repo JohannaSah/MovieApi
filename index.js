@@ -169,14 +169,14 @@ app.get('/documentation', (req, res) => {
 });
 
 // -> Return a list of ALL movies to the user;
-app.get('/movies', (req, res) => {
+app.get('/movies', passport.authenticate('jwt', {session: false}), (req, res) => {
     console.log('movies has been called');
     Movies.find()
         .then((movies) => {
             res.status(201).json(movies);
         })
         .catch((err) => {
-            console.log(err);
+            console.error(err);
             res.status(500).send('Error: ' + err);
         });
 });
