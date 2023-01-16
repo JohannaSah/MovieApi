@@ -16,11 +16,11 @@ passport.use(new LocalStrategy({
         Users.findOne({Username: username}, (error, user) => {
             if(error) {
                 console.log(error);
-                return callback0(error);
+                return callback(error);
             }
             if(!user) {
                 console.log('incorrect username');
-                return callback0(null, false, {message: 'Incorrect username or password'});
+                return callback(null, false, {message: 'Incorrect username or password'});
             }
 
             console.log.apply('finished');
