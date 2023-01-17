@@ -12,6 +12,9 @@ const express = require('express'),
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+const cors = require('cors');
+app.use(cors());
+
 let auth = require('./auth')(app); // (app) ensures, that Express is available in auth.js file as well
 const passport = require('passport'); // require passport module
 require('./passport'); // import passport.js file
