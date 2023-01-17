@@ -49,7 +49,19 @@ mongoose.connect('mongodb://localhost:27017/myFlixDataBase', {useNewUrlParser: t
 // then callback function that takes newly created document as parameter which responds feedback of completed new user
 // error handling functions
 // no authentication as anonymous users need to be able to register as new users
-app.post('/users', (req, res) => {
+app.post('/users',
+[
+ check('Username', 'Username is required').isLength({min:5}),
+ check('Username', 'Username contains non alphanumeric characters - not allowed').isAlphanumeric(),
+ check('Password', 'Password is required').not().isEmpty(),
+ check('Email', 'Email does not appear to be valid').isEmail() 
+], 
+(req, res) => {
+    let errors = validationResult(req);
+    if(!errors.isEmpty()) {
+        return res.status(422).json({errors: errors.array()});
+    }
+
     let hashedPassword = Users.hashPassword(req.body.Password);
     Users.findOne({ Username: req.body.Username })
         .then((user) => {
