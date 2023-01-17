@@ -1,6 +1,6 @@
-
 // import mongoose package to work with it
-const mongoose = require('mongoose');
+const mongoose = require('mongoose'),
+    bcrypt = require('bcrypt');
 
 /* // Schemas
 // Schemas can contain
@@ -39,6 +39,17 @@ let userSchema = mongoose.Schema({
     Birthday: Date,
     FavoriteMovies: [{type: mongoose.Schema.Types.ObjectId, ref: 'Movie'}]
 }, { collection : 'Users'});
+
+// add hashPassword function to userSchema
+userSchema.statics.hashPassword = (password) => {
+    return bcrypt.hashSync(password, 10);
+};
+
+// add validatePassword function to userSchema
+// do not use arrow functions when defining instance methods
+userSchema.methods.validatePassword = function(password) {
+    return bcrypt.compareSync(password, this.Password);
+};
 
 // create models
 // use the defined Schemas to create collections called db.movies and db.users (everything is pluralized and lowercaed automatically)
