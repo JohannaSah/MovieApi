@@ -5,9 +5,10 @@ const express = require('express'),
     mongoose = require('mongoose'),
     Models = require('./models.js'),
     Movies = Models.Movie,
-    Users = Models.User,
-    Genres = Models.Genres,
-    Directors = Models.Directors;
+    Users = Models.User;
+    // Genres = Models.Genres,
+    // Directors = Models.Directors // to be added later
+const {check, validationResult} = require('express-validator');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
