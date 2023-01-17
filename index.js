@@ -49,6 +49,7 @@ mongoose.connect('mongodb://localhost:27017/myFlixDataBase', {useNewUrlParser: t
 // error handling functions
 // no authentication as anonymous users need to be able to register as new users
 app.post('/users', (req, res) => {
+    let hashedPassword = Users.hashPassword(req.body.Password);
     Users.findOne({ Username: req.body.Username })
         .then((user) => {
             if (user) {
@@ -58,7 +59,7 @@ app.post('/users', (req, res) => {
                 Users
                     .create({
                         Username: req.body.Username,
-                        Password: req.body.Password,
+                        Password: hashedPassword,
                         Email: req.body.Email,
                         Birthday: req.body.Birthday
                     })
