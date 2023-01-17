@@ -1,5 +1,5 @@
 {
-  "name": "ApiMovie",
+  "name": "api-movie",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
