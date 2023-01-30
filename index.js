@@ -30,7 +30,9 @@ let auth = require('./auth')(app); // (app) ensures, that Express is available i
 const passport = require('passport'); // require passport module
 require('./passport'); // import passport.js file
 
-mongoose.connect('mongodb://localhost:27017/myFlixDataBase', {useNewUrlParser: true, useUnifiedTopology: true}).then( () => console.log('database is connected'));
+// mongoose.connect('mongodb://localhost:27017/myFlixDataBase', {useNewUrlParser: true, useUnifiedTopology: true}).then( () => console.log('database is connected'));
+mongoose.connect('mongodb+srv://myFlixDBadmin:9ZXdbmMo28eA@cluster0.bjuijqy.mongodb.net/myFlixDataBase?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true}).then( () => console.log('database is connected'));
+
 
 // Create 
 
