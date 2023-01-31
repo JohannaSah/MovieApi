@@ -31,8 +31,8 @@ const passport = require('passport'); // require passport module
 require('./passport'); // import passport.js file
 
 // mongoose.connect('mongodb://localhost:27017/myFlixDataBase', {useNewUrlParser: true, useUnifiedTopology: true}).then( () => console.log('database is connected'));
-mongoose.connect('process.env.CONNECTION_URI', {useNewUrlParser: true, useUnifiedTopology: true}).then( () => console.log('database is connected'));
-
+mongoose.connect( process.env.CONNECTION_URI);
+// mongoose.set('strictQuery', true);
 
 // Create 
 
