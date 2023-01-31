@@ -32,6 +32,7 @@ require('./passport'); // import passport.js file
 
 // mongoose.connect('mongodb://localhost:27017/myFlixDataBase', {useNewUrlParser: true, useUnifiedTopology: true}).then( () => console.log('database is connected'));
 mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+// version containing the code behind the environment variable (have tried it the database named between the / and the ? as well, made no difference): mongoose.connect('mongodb+srv://myFlixDBadmin:9ZXdbmMo28eA@cluster0.bjuijqy.mongodb.net/?retryWrites=true&w=majority')
 // mongoose.set('strictQuery', true);
 
 // Create 
