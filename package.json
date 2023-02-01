@@ -6,8 +6,6 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
     "dev": "nodemon index.js",
-    // "build:client": "your build command for client",
-    // "build:server": "your build command for server",
     "build": "npm run build"
   },
   "repository": {
