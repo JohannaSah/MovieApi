@@ -1,13 +1,15 @@
 const express = require('express'),
     app = express(),
+    morgan = require('morgan'),
     bodyParser = require('body-parser'),
     uuid = require('uuid'),
     mongoose = require('mongoose'),
     Models = require('./models.js'),
     Movies = Models.Movie,
-    Users = Models.User;
-    // Genres = Models.Genres,
-    // Directors = Models.Directors // to be added later
+    Users = Models.User,
+    Genres = Models.Genre,
+    Directors = Models.Director;
+
 const {check, validationResult} = require('express-validator');
 
 app.use(bodyParser.json());
@@ -29,6 +31,9 @@ app.use(cors({
 let auth = require('./auth')(app); // (app) ensures, that Express is available in auth.js file as well
 const passport = require('passport'); // require passport module
 require('./passport'); // import passport.js file
+
+app.use(express.static('public'));
+app.use(morgan('common'));
 
 // mongoose.connect('mongodb://localhost:27017/myFlixDataBase', {useNewUrlParser: true, useUnifiedTopology: true}).then( () => console.log('database is connected'));
 mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -140,6 +145,43 @@ app.post('/movies', passport.authenticate('jwt', {session: false}), (req, res) =
     });
 }); 
 
+//Add new Genre
+app.post('/genres', (req, res) => {
+    Genres.findOne({ Name: req.body.Name })
+    .then((name) =>{ 
+      if (name) {
+          return res.status(400).send(req.body.Name + ' already exist');
+        }else{
+          Genres.create({
+            Name: req.body.Name,
+            Description: req.body.Description
+          }).then((name) => {res.status(201).json(name)}).catch((error => {
+            console.error(error);
+            res.status(500).send('Error:' + error);
+          }))
+        }
+      });
+  });
+
+  //Add new Director
+app.post('/directors', (req, res) => {
+    Directors.findOne({ Name: req.body.Name })
+    .then((name) =>{ 
+      if (name) {
+          return res.status(400).send(req.body.Name + ' already exist');
+        }else{
+          Directors.create({
+            Name: req.body.Name,
+            Bio: req.body.Bio,
+            YearofBirth: req.body.YearofBirth,
+            YearofDeath: req.body.YearofDeath
+          }).then((name) => {res.status(201).json(name)}).catch((error => {
+            console.error(error);
+            res.status(500).send('Error:' + error);
+          }))
+        }
+      });
+  });
 
 // UPDATE
 
@@ -271,7 +313,7 @@ app.get('/users', passport.authenticate('jwt', {session: false}), (req, res) => 
         console.error(err);
         res.status(500).send('Error: ' + err);
     });
-})
+});
 
 // -> return data about specific user via username
 app.get('/users/:Username', passport.authenticate('jwt', {session: false}), (req, res) => {
@@ -283,7 +325,53 @@ app.get('/users/:Username', passport.authenticate('jwt', {session: false}), (req
     .catch((err) => {
         res.status(500).send('Error: ' + err);
     })
-})
+});
+
+// -> return all directors via specified directors endpoint
+app.get('/directors', passport.authenticate('jwt', {session: false}), (req, res) => {
+    Directors.find()
+    .then((director) => {
+        res.status(201).json(director);
+    })
+    .catch((err) => {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+    })
+});
+
+// -> return director by name via specified directors endpoint
+app.get('/directors/:Name', passport.authenticate('jwt', {session: false}), (req, res) => {
+    Directors.findOne({Name: req.params.Name})
+    .then((director) => {
+        res.json(director);
+    })
+    .catch((err) => {
+        console.error(err);
+        res.status(500).send ('Error: ' + err);
+    })
+});
+
+// -> return all genres via specified genre endpoint
+app.get('/genres', passport.authenticate('jwt', {session: false}), (req, res) => {
+    Genres.find()
+    .then((genres) => {
+      res.status(201).json(genres);
+    }).catch((err) =>{
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    })
+  });
+
+//-< return genre by name via specified genre endpoint
+app.get('/genres/:Name', passport.authenticate('jwt', {session: false}), (req, res) => {
+    Genres.findOne({ Name: req.params.Name })
+    .then((genre) => {
+      res.json(genre);
+    }).catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    })
+  });
 
 // DELETE
 
