@@ -6,7 +6,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "build": "webpack --mode production"
+    "build": "node index.js"
   },
   "repository": {
     "type": "git",
