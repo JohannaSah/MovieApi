@@ -23,7 +23,7 @@
   "Title": "The Intouchables",
   "Director": {
     "Name": [
-      "Oliver Nakache",
+      "Olivier Nakache",
       "Eric Toledano"
     ],
     "Bio": "O.N.: Olivier Nakache was born on April 15, 1973 in Suresnes, Hauts-de-Seine, France. He is a writer and producer, known for The Intouchables (2011), C'est la vie! (2017) and The Specials (2019). / E.T.: Éric Toledano was born on July 3, 1971 in Paris, France. He is a writer and producer, known for The Intouchables (2011), C'est la vie! (2017) and The Specials (2019).  ",
@@ -144,8 +144,7 @@
     "Description": "In film and television, drama is a category or genre of narrative fiction (or semi-fiction) intended to be more serious than humorous in tone."
   },
   "imageUrl": "https://www.imdb.com/title/tt0097165/mediaviewer/rm1115750912/?ref_=tt_ov_i",
-  "Featured": true,
-  "Bio": "Peter Weir was born on August 21, 1944 in Sydney, New South Wales, Australia. He is a director and writer, known for Master and Commander: The Far Side of the World (2003), The Truman Show (1998) and Dead Poets Society (1989). He has been married to Wendy Stites since 1966. They have two children."
+  "Featured": true
 },{
   "_id": {
     "$oid": "63ac5b206252e54be0c264b5"
@@ -181,6 +180,5 @@
     "Description": "A comedy film is a category of film which emphasizes humor.[1] These films are designed to make the audience laugh through amusement.[2] Films in this style traditionally have a happy ending (black comedy being an exception)."
   },
   "imageURL": "https://www.imdb.com/title/tt0120382/mediaviewer/rm1927354112/?ref_=tt_ov_i",
-  "Featured": false,
-  "Bio": "Peter Weir was born on August 21, 1944 in Sydney, New South Wales, Australia. He is a director and writer, known for Master and Commander: The Far Side of the World (2003), The Truman Show (1998) and Dead Poets Society (1989). He has been married to Wendy Stites since 1966. They have two children."
+  "Featured": false
 }]
