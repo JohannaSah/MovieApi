@@ -51,12 +51,30 @@ userSchema.methods.validatePassword = function(password) {
     return bcrypt.compareSync(password, this.Password);
 };
 
+// define directorSchema
+let directorSchema = mongoose.Schema({
+    Name: {type: String, required: true},
+    Bio: String, 
+    YearofBirth: String, 
+    YeardofDeath: String
+}, {collection : 'Directors'});
+
+// define genreSchema
+let genreSchema = mongoose.Schema({
+    Name: {type: String, required: true},
+    Description: {type: String, required: true}
+}, {collection: 'Genres'})
+
 // create models
 // use the defined Schemas to create collections called db.movies and db.users (everything is pluralized and lowercaed automatically)
 let Movie = mongoose.model('Movie', movieSchema);
 let User = mongoose.model('User', userSchema);
+let Director = mongoose.model('Director', directorSchema);
+let Genre = mongoose.model('Genre', genreSchema);
 
 //export models
 // export models in order to be able to import them into index.js
 module.exports.Movie = Movie;
 module.exports.User = User;
+module.exports.Director = Director;
+module.exports.Genre = Genre;
