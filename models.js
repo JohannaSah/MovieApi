@@ -63,7 +63,7 @@ let directorSchema = mongoose.Schema({
 let genreSchema = mongoose.Schema({
     Name: {type: String, required: true},
     Description: {type: String, required: true}
-}, {collection: 'Genres'})
+}, {collection: 'Genres'});
 
 // create models
 // use the defined Schemas to create collections called db.movies and db.users (everything is pluralized and lowercaed automatically)
