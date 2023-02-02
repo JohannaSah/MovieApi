@@ -59,7 +59,7 @@ mongoose.connect('mongodb+srv://myFlixDBadmin:9ZXdbmMo28eA@cluster0.bjuijqy.mong
 // no authentication as anonymous users need to be able to register as new users
 app.post('/users',
 [
- check('Username', 'Username is required').isLength({min:5}),
+ check('Username', 'Username is required').isLength({min:5}),// minimum lenght is 5 characters 
  check('Username', 'Username contains non alphanumeric characters - not allowed').isAlphanumeric(),
  check('Password', 'Password is required').not().isEmpty(),
  check('Email', 'Email does not appear to be valid').isEmail() 
@@ -331,7 +331,7 @@ app.get('/users/:Username', passport.authenticate('jwt', {session: false}), (req
 app.get('/directors', (req, res) => {
     Directors.find()
     .then((director) => {
-        res.status(201).json(director);
+        res.status(200).json(director);
     })
     .catch((err) => {
         console.error(err);
@@ -343,7 +343,7 @@ app.get('/directors', (req, res) => {
 app.get('/directors/:Name', (req, res) => {
     Directors.findOne({Name: req.params.Name})
     .then((director) => {
-        res.json(director);
+        res.status(200).json(director);
     })
     .catch((err) => {
         console.error(err);
@@ -355,7 +355,7 @@ app.get('/directors/:Name', (req, res) => {
 app.get('/genres', (req, res) => {
     Genres.find()
     .then((genres) => {
-      res.status(201).json(genres);
+      res.status(200).json(genres);
     }).catch((err) =>{
       console.error(err);
       res.status(500).send('Error: ' + err);
@@ -366,7 +366,7 @@ app.get('/genres', (req, res) => {
 app.get('/genres/:Name', (req, res) => {
     Genres.findOne({ Name: req.params.Name })
     .then((genre) => {
-      res.json(genre);
+      res.status(200).json(genre);
     }).catch((err) => {
       console.error(err);
       res.status(500).send('Error: ' + err);
