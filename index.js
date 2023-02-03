@@ -37,25 +37,8 @@ require('./passport'); // import passport.js file
 app.use(express.static('public'));
 app.use(morgan('common'));
 
-const swaggerSpec = swaggerJsdoc({
-    swaggerDefinition: {
-       info: {
-          title: "My Express API",
-          description: "My Express API description",
-          version: "1.0.0"
-       },
-       servers: [
-          { url: "http://localhost:3000/api" }
-       ]
-    },
-    apis: ["./swagger.js"]
- });
- 
- app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
- 
  // Your API routes here
  
-
 // mongoose.connect('mongodb://localhost:27017/myFlixDataBase', {useNewUrlParser: true, useUnifiedTopology: true}).then( () => console.log('database is connected'));
 mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 // mongoose.connect('mongodb+srv://myFlixDBadmin:9ZXdbmMo28eA@cluster0.bjuijqy.mongodb.net/myFlixMovieDataBase?retryWrites=true&w=majority',{ useNewUrlParser: true, useUnifiedTopology: true });
@@ -373,7 +356,7 @@ app.get('/directors/:Name', passport.authenticate('jwt', {session: false}), (req
 });
 
 // -> return all genres via specified genre endpoint
-app.get('/genres', (req, res) => {
+app.get('/genres', passport.authenticate('jwt', {session: false}), (req, res) => {
     Genres.find()
     .then((genres) => {
       res.status(200).json(genres);
@@ -384,7 +367,7 @@ app.get('/genres', (req, res) => {
   });
 
 //-< return genre by name via specified genre endpoint
-app.get('/genres/:Name', (req, res) => {
+app.get('/genres/:Name', passport.authenticate('jwt', {session: false}), (req, res) => {
     Genres.findOne({ Name: req.params.Name })
     .then((genre) => {
       res.status(200).json(genre);
