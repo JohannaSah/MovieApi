@@ -309,7 +309,7 @@ app.get('/movies', passport.authenticate('jwt', {session: false}), (req, res) =>
  *               $ref: '#/components/schemas/Movie'
  */
 
-app.get('/movies/:Title', passport.authenticate('jwt', {session: false}), (req, res) => {
+app.get('/movies/:Title', (req, res) => {
     console.log('specific movie has been called');
     Movies.findOne({ Title: req.params.Title })
         .then((movie) => {
