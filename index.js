@@ -49,18 +49,18 @@ const swaggerOptions = {
        info: {
           title: "myFlix API",
           description: "Movie Api",
-          version: "1.0.0"
+          version: "1.0.0",
+          servers: [
+                { 
+                    url: "http://localhost:8080",
+                    description: "Local server"
+                },
+                { 
+                    url: "https://movieapi-dcj2.onrender.com",
+                    description: "Production server"
+                } 
+            ]
        },
-       servers: [
-            { 
-                url: "http://localhost:3000/api",
-                description: "Local server"
-            },
-            { 
-                url: "https://movieapi-dcj2.onrender.com/",
-                description: "Production server"
-            } 
-       ]
     },
     apis: ["index.js"]
  };
