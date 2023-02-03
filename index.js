@@ -42,7 +42,7 @@ const accessLogStream = fs.createWriteStream(path.join(__dirname, "log.txt"), {
   });
 
 app.use(express.static('public'));
-app.use(morgan('common'));
+app.use(morgan('combined', {stream: accessLogStream}));
 
 const swaggerOptions = {
     swaggerDefinition: {
@@ -319,7 +319,8 @@ app.put('/users/:Username', passport.authenticate('jwt', {session: false}),
  * @swagger 
  * /:
  * get:
- *  description: returns welcome page
+ *  summary: welcome page
+ *  tags: [Welcome]
  *  responses:
  *      '200':
  *          description: A succesfull response
