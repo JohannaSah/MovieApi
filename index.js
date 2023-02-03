@@ -283,7 +283,7 @@ app.get('/documentation', (req, res) => {
  *  description: Returns all movies to user
  *  responses:
  *      '200':
- *          description: A succesfull respnse
+ *          description: A succesfull response
  */
 app.get('/movies', (req, res) => {
     console.log('movies has been called');
