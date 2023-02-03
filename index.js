@@ -51,8 +51,8 @@ const swaggerSpec = swaggerJsdoc({
     apis: ["./swagger.js"]
  });
  
- app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
- 
+ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec)); 
+
  // Your API routes here
  
 
@@ -373,7 +373,7 @@ app.get('/directors/:Name', passport.authenticate('jwt', {session: false}), (req
 });
 
 // -> return all genres via specified genre endpoint
-app.get('/genres', (req, res) => {
+app.get('/genres', passport.authenticate('jwt', {session: false}), (req, res) => {
     Genres.find()
     .then((genres) => {
       res.status(200).json(genres);
@@ -384,7 +384,7 @@ app.get('/genres', (req, res) => {
   });
 
 //-< return genre by name via specified genre endpoint
-app.get('/genres/:Name', (req, res) => {
+app.get('/genres/:Name', passport.authenticate('jwt', {session: false}), (req, res) => {
     Genres.findOne({ Name: req.params.Name })
     .then((genre) => {
       res.status(200).json(genre);
