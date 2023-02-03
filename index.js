@@ -59,7 +59,7 @@ mongoose.connect('mongodb+srv://myFlixDBadmin:9ZXdbmMo28eA@cluster0.bjuijqy.mong
 // no authentication as anonymous users need to be able to register as new users
 app.post('/users',
 [
- check('Username', 'Username is required').isLength({min:5}),// minimum lenght is 5 characters 
+ check('Username', 'Username with a minimum of 5 characters is required').isLength({min:5}),// minimum lenght is 5 characters 
  check('Username', 'Username contains non alphanumeric characters - not allowed').isAlphanumeric(),
  check('Password', 'Password is required').not().isEmpty(),
  check('Email', 'Email does not appear to be valid').isEmail() 
@@ -253,7 +253,7 @@ app.get('/documentation', (req, res) => {
 });
 
 // -> Return a list of ALL movies to the user;
-app.get('/movies', (req, res) => {
+app.get('/movies', passport.authenticate('jwt', {session: false}), (req, res) => {
     console.log('movies has been called');
     Movies.find()
         .then((movies) => {
@@ -266,7 +266,7 @@ app.get('/movies', (req, res) => {
 });
 
 // -> Return data (description, genre, director, image URL, whether it’s featured or not) about a single movie by title to the user;
-app.get('/movies/:Title', (req, res) => {
+app.get('/movies/:Title', passport.authenticate('jwt', {session: false}), (req, res) => {
     console.log('specific movie has been called');
     Movies.findOne({ Title: req.params.Title })
         .then((movie) => {
@@ -279,7 +279,7 @@ app.get('/movies/:Title', (req, res) => {
 });
 
 // -> Return data about a genre (description) by name/title (e.g., “Thriller”);
-app.get('/movies/genre/:genreName', (req, res) => {
+app.get('/movies/genre/:genreName', passport.authenticate('jwt', {session: false}), (req, res) => {
     Movies.findOne({ 'Genre.Name': req.params.genreName })
         .then((movie) => {
             res.status(201).json(movie.Genre);
@@ -291,7 +291,7 @@ app.get('/movies/genre/:genreName', (req, res) => {
 });
 
 // -> Return data about a director (bio, birth year, death year) by name;
-app.get('/movies/directors/:directorName', (req, res) => {
+app.get('/movies/directors/:directorName', passport.authenticate('jwt', {session: false}), (req, res) => {
     Movies.findOne({ 'Director.Name': req.params.directorName })
         .then((movie) => {
             res.status(201).json(movie.Director);
@@ -328,7 +328,7 @@ app.get('/users/:Username', passport.authenticate('jwt', {session: false}), (req
 });
 
 // -> return all directors via specified directors endpoint
-app.get('/directors', (req, res) => {
+app.get('/directors', passport.authenticate('jwt', {session: false}), (req, res) => {
     Directors.find()
     .then((director) => {
         res.status(200).json(director);
@@ -340,7 +340,7 @@ app.get('/directors', (req, res) => {
 });
 
 // -> return director by name via specified directors endpoint
-app.get('/directors/:Name', (req, res) => {
+app.get('/directors/:Name', passport.authenticate('jwt', {session: false}), (req, res) => {
     Directors.findOne({Name: req.params.Name})
     .then((director) => {
         res.status(200).json(director);
