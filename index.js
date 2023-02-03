@@ -81,15 +81,6 @@ mongoose.connect('mongodb+srv://myFlixDBadmin:9ZXdbmMo28eA@cluster0.bjuijqy.mong
 // Create 
 
 // -> Allow new users to register;
-
-/* We’ll expect JSON in this format
-{
-  ID: Integer,
-  Username: String,
-  Password: String,
-  Email: String,
-  Birthday: Date
-}*/
 // first check if username already exists using findOne command
 // if it doesn't exist create a new user
 // then callback function that takes newly created document as parameter which responds feedback of completed new user
@@ -99,10 +90,13 @@ mongoose.connect('mongodb+srv://myFlixDBadmin:9ZXdbmMo28eA@cluster0.bjuijqy.mong
  * @swagger 
  * /users:
  * post:
- *  description: allows new users to register
+ *  summary: allows new users to register
+ *  tags: [Users]
+ *  requestBody:
+ *      required: true
  *  responses:
- *      '200':
- *          description: A succesfull response
+ *      '201':
+ *          description: The user was succesfully created
  */
 app.post('/users',
 [
@@ -147,12 +141,23 @@ app.post('/users',
 // -> Allow users to add a movie to their list of favorites (showing only a text that a movie has been added—more on this later);
  /**
  * @swagger 
- * /users/:Username/movies/:MovieID:
- * post:
- *  description: adds specific movie to user's favorite list by movieId
- *  responses:
- *      '200':
- *          description: A succesfull response
+ * /users/{Username}/movies/{MovieID}:
+ *  post:
+ *     summary: Add a movie to a user's list of favorites by id
+ *     tags: [Users]
+ *     parameters:
+ *       - name: Username
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The user's username
+ *       - name: MovieID
+ *         required: true
+ *         description: The movie ID
+ *
+ *     responses:
+ *       201:
+ *         description: The movie was added
  */
 app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', {session: false}), (req, res) => {
     Users.findOneAndUpdate({ Username: req.params.Username }, {
@@ -169,113 +174,28 @@ app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', {sessi
     });
   });
 
- // add a movie what at /movies
-  /**
- * @swagger 
- * /movies:
- * post:
- *  description: adds new movie to collection
- *  responses:
- *      '200':
- *          description: A succesfull response
- */
-app.post('/movies', passport.authenticate('jwt', {session: false}), (req, res) => {
-    Movies.findOne({ Username: req.body.Title }).then((movie) => {
-        if (movie) {
-            return res.status(400).send(req.body.Title + 'aleady exists');
-        } else {
-            Movies.create({
-                Title: req.body.Title,
-                Description: req.body.Description,
-                Genre: {
-                    Name: req.body.Name,
-                    Description: req.body.Description,
-                },
-                Director: {
-                    Name: req.body.Name,
-                    Bio: req.body.Bio,
-                },
-                ImageURL: req.body.ImageURL,
-                Featured: req.body.Boolean,
-            })
-                .then((movie) => {
-                    res.status(201).json(movie);
-                })
-                .catch((err) => {
-                    console.log(err);
-                    res.status(500).send('Error: ' + err);
-                });
-        }
-    });
-}); 
-
-//Add new Genre
- /**
- * @swagger 
- * /dgenres:
- * post:
- *  description: adds new genre to collection
- *  responses:
- *      '200':
- *          description: A succesfull response
- */
-app.post('/genres', passport.authenticate('jwt', {session: false}), (req, res) => {
-    Genres.findOne({ Name: req.body.Name })
-    .then((name) =>{ 
-      if (name) {
-          return res.status(400).send(req.body.Name + ' already exist');
-        }else{
-          Genres.create({
-            Name: req.body.Name,
-            Description: req.body.Description
-          }).then((name) => {res.status(201).json(name)}).catch((error => {
-            console.error(error);
-            res.status(500).send('Error:' + error);
-          }))
-        }
-      });
-  });
-
-  //Add new Director
-  /**
- * @swagger 
- * /directors:
- * post:
- *  description: adds new director to collection
- *  responses:
- *      '200':
- *          description: A succesfull response
- */
-app.post('/directors', passport.authenticate('jwt', {session: false}), (req, res) => {
-    Directors.findOne({ Name: req.body.Name })
-    .then((name) =>{ 
-      if (name) {
-          return res.status(400).send(req.body.Name + ' already exist');
-        }else{
-          Directors.create({
-            Name: req.body.Name,
-            Bio: req.body.Bio,
-            YearofBirth: req.body.YearofBirth,
-            YearofDeath: req.body.YearofDeath
-          }).then((name) => {res.status(201).json(name)}).catch((error => {
-            console.error(error);
-            res.status(500).send('Error:' + error);
-          }))
-        }
-      });
-  });
-
+ 
 // UPDATE
 
 // -> Allow users to update their user info (username);
 /**
  * @swagger 
- * /users/:Username:
- * put:
- *  description: allows users to update their information
- *  responses:
- *      '200':
- *          description: A succesfull response
+ * /users/{Username}:
+ *  put:
+ *    summary: Update a user's info, by username
+ *    tags: [Users]
+ *    parameters:
+ *      - in: path
+ *        name: Username
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: The user's username
+ *    requestBody:
+ *      required: true
+ *    responses:
+ *      200:
+ *        description: The user was updated
  */
 app.put('/users/:Username', passport.authenticate('jwt', {session: false}),
 [
@@ -334,7 +254,8 @@ app.get('/', (req, res) => {
  * @swagger 
  * /documentation:
  * get:
- *  description: returns documentation.html
+ *  summary: returns documentation.html
+ * tags: [Documentation]
  *  responses:
  *      '200':
  *          description: A succesfull response
@@ -349,16 +270,18 @@ app.get('/documentation', (req, res) => {
  * @swagger 
  * /movies:
  * get:
- *  description: Returns all movies to user
+ *  summary: Gets List of all movies
+ *  tags: [Movies]
  *  responses:
  *      '200':
  *          description: A succesfull response
+ *          content: application/json
  */
 app.get('/movies', (req, res) => {
     console.log('movies has been called');
     Movies.find()
         .then((movies) => {
-            res.status(201).json(movies);
+            res.status(200).json(movies);
         })
         .catch((err) => {
             console.error(err);
@@ -369,12 +292,18 @@ app.get('/movies', (req, res) => {
 // -> Return data (description, genre, director, image URL, whether it’s featured or not) about a single movie by title to the user;
 /**
  * @swagger 
- * /movies/:Title:
- * get:
- *  description: Returns specific movie by name to user
- *  responses:
- *      '200':
- *          description: A succesfull response
+ * /movies/{Title}:
+ *    get:
+ *      summary: Get data about a single movie by title
+ *      tags: [Movies]
+ *      parameters:
+ *          - name: Title
+ *            description: Title of movie
+ *            schema:
+ *              type: string
+ *      responses:
+ *           200:
+ *               description: A successful response
  */
 app.get('/movies/:Title', passport.authenticate('jwt', {session: false}), (req, res) => {
     console.log('specific movie has been called');
@@ -391,12 +320,18 @@ app.get('/movies/:Title', passport.authenticate('jwt', {session: false}), (req, 
 // -> Return data about a genre (description) by name/title (e.g., “Thriller”);
 /**
  * @swagger 
- * /movies/genre/:genreName:
+ * /movies/genre/{genreName}:
  * get:
- *  description: Returns specific genre by name to user
- *  responses:
- *      '200':
- *          description: A succesfull response
+ *   summary: Return data about a genre (description) by name
+ *      tags: [Genres, Movies]
+ *      parameters:
+ *        - name: Name
+ *          description: Name of genre
+ *          schema:
+ *            type: string
+ *      responses:
+ *         200:
+ *           description: A successful response
  */
 app.get('/movies/genre/:genreName', passport.authenticate('jwt', {session: false}), (req, res) => {
     Movies.findOne({ 'Genre.Name': req.params.genreName })
@@ -412,12 +347,19 @@ app.get('/movies/genre/:genreName', passport.authenticate('jwt', {session: false
 // -> Return data about a director (bio, birth year, death year) by name;
 /**
  * @swagger 
- * /movies/directors/:directorName:
+ * /movies/directors/{directorName}:
  * get:
- *  description: Returns specific director by name to user
- *  responses:
- *      '200':
- *          description: A succesfull response
+ *  summary: Return data about a director by name
+ *      tags: [Directors, Movies]
+ *      parameters:
+ *         - name: Name
+ *           description: Name of director
+ *           schema:
+ *             type: string
+ *             format: string
+ *      responses:
+ *         200:
+ *           description: A successful response
  */
 app.get('/movies/directors/:directorName', passport.authenticate('jwt', {session: false}), (req, res) => {
     Movies.findOne({ 'Director.Name': req.params.directorName })
@@ -434,11 +376,12 @@ app.get('/movies/directors/:directorName', passport.authenticate('jwt', {session
 /**
  * @swagger 
  * /users:
- * get:
- *  description: Returns all users
- *  responses:
- *      '200':
- *          description: A succesfull response
+ *  get:
+ *      summary: Get all users
+ *      tags: [Users]
+ *      responses:
+ *        200:
+ *          description: A successful response
  */
 app.get('/users', passport.authenticate('jwt', {session: false}), (req, res) => {
     console.log('users has been called');
@@ -455,12 +398,19 @@ app.get('/users', passport.authenticate('jwt', {session: false}), (req, res) => 
 // -> return data about specific user via username
 /**
  * @swagger 
- * /users/:Username:
- * get:
- *  description: Returns information about specific user by Username
- *  responses:
- *      '200':
- *          description: A succesfull response
+ * /users/{Username}:
+ *    get:
+ *      summary: Get a user by username
+ *      tags: [Users]
+ *      parameters:
+ *        - name: Username
+ *          description: User username
+ *          schema:
+ *            type: string
+ *            format: string
+ *      responses:
+ *        200:
+ *          description: A successful response
  */
 app.get('/users/:Username', passport.authenticate('jwt', {session: false}), (req, res) => {
     console.log(req.params.Username);
@@ -476,12 +426,13 @@ app.get('/users/:Username', passport.authenticate('jwt', {session: false}), (req
 // -> return all directors via specified directors endpoint
 /**
  * @swagger 
- * /directors:
- * get:
- *  description: Returns all directors to user
- *  responses:
- *      '200':
- *          description: A succesfull response
+ * /directors/{Name}:
+ *    get:
+ *      summary: Return all directors 
+ *      tags: [Directors, Movies]
+ *      responses:
+ *         200:
+ *           description: A successful response
  */
 app.get('/directors', passport.authenticate('jwt', {session: false}), (req, res) => {
     Directors.find()
@@ -497,12 +448,18 @@ app.get('/directors', passport.authenticate('jwt', {session: false}), (req, res)
 // -> return director by name via specified directors endpoint
 /**
  * @swagger 
- * /directors/:Name:
- * get:
- *  description: Returns specific director by name to user
- *  responses:
- *      '200':
- *          description: A succesfull response
+ * /genres/{Name}:
+ *    get:
+ *      summary: Return data about a genre (description) by name
+ *      tags: [Directors, Movies]
+ *      parameters:
+ *        - name: Name
+ *          description: Name of genre
+ *          schema:
+ *            type: string
+ *      responses:
+ *         200:
+ *           description: A successful response
  */
 app.get('/directors/:Name', passport.authenticate('jwt', {session: false}), (req, res) => {
     Directors.findOne({Name: req.params.Name})
@@ -519,11 +476,12 @@ app.get('/directors/:Name', passport.authenticate('jwt', {session: false}), (req
 /**
  * @swagger 
  * /genres:
- * get:
- *  description: Returns all genres to user
- *  responses:
- *      '200':
- *          description: A succesfull response
+ *    get:
+ *      summary: Return all genres
+ *      tags: [Genres, Movies]
+ *      responses:
+ *         200:
+ *           description: A successful response
  */
 app.get('/genres', passport.authenticate('jwt', {session: false}), (req, res) => {
     Genres.find()
@@ -538,12 +496,18 @@ app.get('/genres', passport.authenticate('jwt', {session: false}), (req, res) =>
 //-< return genre by name via specified genre endpoint
 /**
  * @swagger 
- * /genres/:Name:
- * get:
- *  description: Returns specific genre by name to user
- *  responses:
- *      '200':
- *          description: A succesfull response
+ * /genres/{Name}:
+ *    get:
+ *      summary: Return data about a genre (description) by name
+ *      tags: [Genres, Movies]
+ *      parameters:
+ *        - name: Name
+ *          description: Name of genre
+ *          schema:
+ *            type: string
+ *      responses:
+ *         200:
+ *           description: A successful response
  */
 app.get('/genres/:Name', passport.authenticate('jwt', {session: false}), (req, res) => {
     Genres.findOne({ Name: req.params.Name })
@@ -560,12 +524,22 @@ app.get('/genres/:Name', passport.authenticate('jwt', {session: false}), (req, r
 // -> Allow users to remove a movie from their list of favorites;
 /**
  * @swagger 
- * /users/:Username/movies/:MovieID:
- * delete:
- *  description: deletes specific movie from user's favoritelist by movieId
- *  responses:
- *      '200':
- *          description: A succesfull response
+ * /users/{Username}/movies/{MovieID}:
+ *   delete:
+ *     summary: Remove a movie from a user's list of favorites by id
+ *     tags: [Users]
+ *     parameters:
+ *       - name: Username
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The user's username
+ *       - name: MovieID
+ *         required: true
+ *         description: The movie ID
+ *     responses:
+ *       202:
+ *         description: The movie was deleted
  */
 app.delete('/users/:Username/movies/:MovieID', passport.authenticate('jwt', {session: false}), (req, res) => {
     Users.findOneAndUpdate(
@@ -588,12 +562,21 @@ app.delete('/users/:Username/movies/:MovieID', passport.authenticate('jwt', {ses
 // -> Allow existing users to deregister 
 /**
  * @swagger 
- * /users/:Username:
- * delete:
- *  description: deletes specific user by Username
- *  responses:
- *      '200':
- *          description: A succesfull response
+ * /users/{Username}:
+ *   delete:
+ *     summary: Delete a user by username
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: Username
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The user's username
+ *
+ *     responses:
+ *       202:
+ *         description: The user was deleted
  */
 app.delete('/users/:Username', passport.authenticate('jwt', {session: false}), (req, res) => {
     Users.findOneAndRemove({ Username: req.params.Username })
