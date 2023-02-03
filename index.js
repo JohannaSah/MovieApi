@@ -45,7 +45,7 @@ const swaggerSpec = swaggerJsdoc({
           version: "1.0.0"
        },
        servers: [
-          { url: "http://localhost:3000/api" }
+          { url: "http://localhost:3000/api" } // what should I use here?
        ]
     },
     apis: ["./index.js"]
