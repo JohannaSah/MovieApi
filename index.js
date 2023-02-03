@@ -40,18 +40,20 @@ app.use(morgan('common'));
 const swaggerSpec = swaggerJsdoc({
     swaggerDefinition: {
        info: {
-          title: "My Express API",
-          description: "My Express API description",
+          title: "myFlix API",
+          description: "myFlix API description",
           version: "1.0.0"
        },
        servers: [
           { url: "http://localhost:3000/api" }
        ]
     },
-    apis: ["./swagger.js"]
+    apis: ["./index.js"]
  });
+
+ const swaggerDocs = swaggerJsdoc(swaggerSpec);
  
- app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec)); 
+ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs)); 
 
  // Your API routes here
  
@@ -274,6 +276,15 @@ app.get('/documentation', (req, res) => {
 });
 
 // -> Return a list of ALL movies to the user;
+/**
+ * @swagger 
+ * /movies:
+ * get:
+ *  description: Returns all movies to user
+ *  responses:
+ *      '200':
+ *          description: A succesfull respnse
+ */
 app.get('/movies', (req, res) => {
     console.log('movies has been called');
     Movies.find()
