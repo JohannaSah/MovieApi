@@ -287,6 +287,28 @@ app.get('/movies', passport.authenticate('jwt', {session: false}), (req, res) =>
 });
 
 // -> Return data (description, genre, director, image URL, whether it’s featured or not) about a single movie by title to the user;
+
+/**
+ * @swagger
+ * /api/movies/{title}:
+ *   get:
+ *     description: Returns a movie by Title
+ *     parameters:
+ *       - in: path
+ *         name: Title
+ *         required: true
+ *         description: Title of the movie to return
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: A movie object
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Movie'
+ */
+
 app.get('/movies/:Title', passport.authenticate('jwt', {session: false}), (req, res) => {
     console.log('specific movie has been called');
     Movies.findOne({ Title: req.params.Title })
