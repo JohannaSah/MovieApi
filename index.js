@@ -4,6 +4,8 @@ const express = require('express'),
     bodyParser = require('body-parser'),
     uuid = require('uuid'),
     mongoose = require('mongoose'),
+    swaggerUi = require('swagger-ui-express'),
+    swaggerJsdoc = require('swagger-jsdoc'),
     Models = require('./models.js'),
     Movies = Models.Movie,
     Users = Models.User,
@@ -35,9 +37,28 @@ require('./passport'); // import passport.js file
 app.use(express.static('public'));
 app.use(morgan('common'));
 
+const swaggerSpec = swaggerJsdoc({
+    swaggerDefinition: {
+       info: {
+          title: "My Express API",
+          description: "My Express API description",
+          version: "1.0.0"
+       },
+       servers: [
+          { url: "http://localhost:3000/api" }
+       ]
+    },
+    apis: ["./swagger.js"]
+ });
+ 
+ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+ 
+ // Your API routes here
+ 
+
 // mongoose.connect('mongodb://localhost:27017/myFlixDataBase', {useNewUrlParser: true, useUnifiedTopology: true}).then( () => console.log('database is connected'));
-// mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-mongoose.connect('mongodb+srv://myFlixDBadmin:9ZXdbmMo28eA@cluster0.bjuijqy.mongodb.net/myFlixMovieDataBase?retryWrites=true&w=majority',{ useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+// mongoose.connect('mongodb+srv://myFlixDBadmin:9ZXdbmMo28eA@cluster0.bjuijqy.mongodb.net/myFlixMovieDataBase?retryWrites=true&w=majority',{ useNewUrlParser: true, useUnifiedTopology: true });
 
 
 // Create 
