@@ -21,7 +21,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const cors = require('cors');
-let allowedOrigins = ['http://localhost:8080', 'http://testsite.com']; // list of allowed domains
+let allowedOrigins = ['http://localhost:8080', 'https://movieapi-dcj2.onrender.com/', 'http://testsite.com']; // list of allowed domains
 app.use(cors({
     origin:(origin, callback) => {
         if (!origin) return callback(null, true);
@@ -37,26 +37,38 @@ let auth = require('./auth')(app); // (app) ensures, that Express is available i
 const passport = require('passport'); // require passport module
 require('./passport'); // import passport.js file
 
+const accessLogStream = fs.createWriteStream(path.join(__dirname, "log.txt"), {
+    flags: "a",
+  });
+
 app.use(express.static('public'));
 app.use(morgan('common'));
 
-const swaggerSpec = swaggerJsdoc({
+const swaggerOptions = {
     swaggerDefinition: {
        info: {
           title: "myFlix API",
-          description: "myFlix API description",
+          description: "Movie Api",
           version: "1.0.0"
        },
        servers: [
-          { url: "http://localhost:3000/api" } // what should I use here?
+            { 
+                url: "http://localhost:3000/api",
+                description: "Local server"
+            },
+            { 
+                url: "https://movieapi-dcj2.onrender.com/",
+                description: "Production server"
+            } 
        ]
     },
-    apis: ["./index.js"]
- });
+    apis: ["index.js"]
+ };
 
- const swaggerDocs = swaggerJsdoc(swaggerSpec);
+ const swaggerDocs = swaggerJsdoc(swaggerOptions);
  
- app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs)); 
+ app.use("/api-documentation", swaggerUi.serve, swaggerUi.setup(swaggerDocs)); 
+
 
  // Your API routes here
  
