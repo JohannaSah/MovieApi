@@ -270,7 +270,7 @@ app.get('/documentation', (req, res) => {
  * @swagger 
  * /movies:
  * get:
- *  summary: Gets List of all movies
+ *  summary: Gets list of all movies
  *  tags: [Movies]
  *  responses:
  *      '200':
