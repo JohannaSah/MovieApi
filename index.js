@@ -277,7 +277,7 @@ app.get('/documentation', (req, res) => {
  *          description: A succesfull response
  *          content: application/json
  */
-app.get('/movies', passport.authenticate('jwt', {session: false}), (req, res) => {
+app.get('/movies', (req, res) => {
     console.log('movies has been called');
     Movies.find()
         .then((movies) => {
