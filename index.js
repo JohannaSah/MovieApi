@@ -374,7 +374,7 @@ app.get('/users/:Username', passport.authenticate('jwt', {session: false}), (req
  * /directors:
  *    get:
  *      summary: Return all directors 
- *      tags: [Directors, Movies]
+ *      tags: [Directors]
  *      responses:
  *         200:
  *           description: A successful response
@@ -395,8 +395,8 @@ app.get('/directors', passport.authenticate('jwt', {session: false}), (req, res)
  * @swagger 
  * /directors/{Name}:
  *    get:
- *      summary: Return data about a genre (description) by name
- *      tags: [Directors, Movies]
+ *      summary: Return data about a directors (description) by name
+ *      tags: [Directors]
  *      parameters:
  *        - name: Name
  *          description: Name of genre
@@ -423,7 +423,7 @@ app.get('/directors/:Name', passport.authenticate('jwt', {session: false}), (req
  * /genres:
  *    get:
  *      summary: Return all genres
- *      tags: [Genres, Movies]
+ *      tags: [Genres]
  *      responses:
  *         200:
  *           description: A successful response
@@ -444,7 +444,7 @@ app.get('/genres', passport.authenticate('jwt', {session: false}), (req, res) =>
  * /genres/{Name}:
  *    get:
  *      summary: Return data about a genre (description) by name
- *      tags: [Genres, Movies]
+ *      tags: [Genres]
  *      parameters:
  *        - name: Name
  *          description: Name of genre
