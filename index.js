@@ -257,7 +257,7 @@ app.get('/documentation', (req, res) => {
 });
 
 // -> Return a list of ALL movies to the user;
-app.get('/movies', passport.authenticate('jwt', {session: false}), (req, res) => {
+app.get('/movies', (req, res) => {
     console.log('movies has been called');
     Movies.find()
         .then((movies) => {
