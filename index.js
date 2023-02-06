@@ -317,61 +317,6 @@ app.get('/movies/:Title', passport.authenticate('jwt', {session: false}), (req, 
         });
 });
 
-// -> Return data about a genre (description) by name/title (e.g., “Thriller”);
-/**
- * @swagger 
- * /movies/genre/{genreName}:
- * get:
- *   summary: Return data about a genre (description) by name
- *      tags: [Genres, Movies]
- *      parameters:
- *        - name: Name
- *          description: Name of genre
- *          schema:
- *            type: string
- *      responses:
- *         200:
- *           description: A successful response
- */
-app.get('/movies/genre/:genreName', passport.authenticate('jwt', {session: false}), (req, res) => {
-    Movies.findOne({ 'Genre.Name': req.params.genreName })
-        .then((movie) => {
-            res.status(201).json(movie.Genre);
-        })
-        .catch((err) => {
-            console.log(err);
-            res.status(500).send('Error: ' + err);
-        });
-});
-
-// -> Return data about a director (bio, birth year, death year) by name;
-/**
- * @swagger 
- * /movies/directors/{directorName}:
- * get:
- *  summary: Return data about a director by name
- *      tags: [Directors, Movies]
- *      parameters:
- *         - name: Name
- *           description: Name of director
- *           schema:
- *             type: string
- *             format: string
- *      responses:
- *         200:
- *           description: A successful response
- */
-app.get('/movies/directors/:directorName', passport.authenticate('jwt', {session: false}), (req, res) => {
-    Movies.findOne({ 'Director.Name': req.params.directorName })
-        .then((movie) => {
-            res.status(201).json(movie.Director);
-        })
-        .catch((err) => {
-            console.log(err);
-            res.status(500).send('Error: ' + err);
-        });
-});
-
 // -> return data on all users
 /**
  * @swagger 
@@ -426,7 +371,7 @@ app.get('/users/:Username', passport.authenticate('jwt', {session: false}), (req
 // -> return all directors via specified directors endpoint
 /**
  * @swagger 
- * /directors/{Name}:
+ * /directors:
  *    get:
  *      summary: Return all directors 
  *      tags: [Directors, Movies]
@@ -448,7 +393,7 @@ app.get('/directors', passport.authenticate('jwt', {session: false}), (req, res)
 // -> return director by name via specified directors endpoint
 /**
  * @swagger 
- * /genres/{Name}:
+ * /directors/{Name}:
  *    get:
  *      summary: Return data about a genre (description) by name
  *      tags: [Directors, Movies]
