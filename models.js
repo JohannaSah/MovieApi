@@ -1,5 +1,5 @@
 // import mongoose package to work with it
-const mongoose = require('mongoose'),
+const mongoose = require('mongoose');
     bcrypt = require('bcrypt');
 
 /* // Schemas
@@ -24,7 +24,7 @@ let movieSchema = mongoose.Schema({
         Name: String,
         Bio: String,
         YearofBirth: String,
-        YeardofDeath: String
+        YearofDeath: String
     },
     Actors: [String],
     ImagePath: String,
@@ -56,7 +56,7 @@ let directorSchema = mongoose.Schema({
     Name: {type: String, required: true},
     Bio: String, 
     YearofBirth: String, 
-    YeardofDeath: String
+    YearofDeath: String
 }, {collection : 'Directors'});
 
 // define genreSchema
