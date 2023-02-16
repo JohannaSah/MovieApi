@@ -56,7 +56,7 @@ const swaggerOptions = {
                     description: "Local server"
                 },
                 { 
-                    url: "https://movieapi-dcj2.onrender.com",
+                    url: "https://movieapi-dcj2.onrender.com/",
                     description: "Production server"
                 } 
             ]
