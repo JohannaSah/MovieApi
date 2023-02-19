@@ -72,7 +72,9 @@ const swaggerOptions = {
 
  // Your API routes here
 
-mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+// mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb+srv://myFlixDBadmin:9ZXdbmMo28eA@cluster0.bjuijqy.mongodb.net/myFlixMovieDataBase?retryWrites=true&w=majority',{ useNewUrlParser: true, useUnifiedTopology: true });
+
 
 // Create 
 
