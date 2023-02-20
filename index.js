@@ -21,7 +21,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const cors = require('cors');
-let allowedOrigins = ['http://localhost:1234', 'http://localhost:52370', 'http://localhost:8080', 'https://movieapi-dcj2.onrender.com/', 'http://testsite.com']; // list of allowed domains
+let allowedOrigins = ['http://localhost:1234', 'http://localhost:52567', 'http://localhost:8080', 'https://movieapi-dcj2.onrender.com/', 'http://testsite.com']; // list of allowed domains
 app.use(cors({
     origin:(origin, callback) => {
         if (!origin) return callback(null, true);
