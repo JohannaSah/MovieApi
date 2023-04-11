@@ -47,10 +47,10 @@ app.use(morgan('combined', {stream: accessLogStream}));
 const swaggerOptions = {
     swaggerDefinition: {
        info: {
-          title: "myFlix API",
-          description: "Movie Api",
-          version: "1.0.0",
-          servers: [
+            title: "myFlix API",
+            description: "API for managing movies, genres, directors, and user profiles",
+            version: "1.0.0",
+            servers: [
                 { 
                     url: "http://localhost:8080",
                     description: "Local server"
@@ -59,11 +59,22 @@ const swaggerOptions = {
                     url: 'https://movieapi-dcj2.onrender.com/',
                     description: "Production server"
                 } 
-            ]
+            ],
+            basePath: "/",
+            schemes: ["http"],
+            consumes: ["application/json"],
+            produces: ["application/json"],
+            securityDefinitions: {
+                JWT: {
+                    type: "apiKey",
+                    name: "Authorization",
+                    in: "header"
+                }
+            } 
        },
     },
     apis: ["index.js"]
- };
+};
 
  const swaggerDocs = swaggerJsdoc(swaggerOptions);
  
@@ -85,14 +96,42 @@ mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifie
  /**
  * @swagger 
  * /users:
- * post:
- *  summary: allows new users to register
- *  tags: [Users]
- *  requestBody:
- *      required: true
- *  responses:
- *      '201':
- *          description: The user was succesfully created
+ *   post:
+ *     summary: Register a new user
+ *     tags: [Users]
+ *     requestBody:
+ *       description: User object that needs to be registered
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               Username:
+ *                 type: string
+ *                 description: Unique username for the user.
+ *                 example: johndoe
+ *               Password:
+ *                 type: string
+ *                 description: User password.
+ *                 example: password123
+ *               Email:
+ *                 type: string
+ *                 description: User email address.
+ *                 example: johndoe@example.com
+ *               Birthday:
+ *                 type: string
+ *                 description: User birthday.
+ *                 example: 1980-01-01
+ *     responses:
+ *       '201':
+ *         description: Successfully registered the user.
+ *       '400':
+ *         description: The username already exists.
+ *       '422':
+ *         description: Validation error. Invalid request body.
+ *     security:
+ *       - JWT: []
  */
 app.post('/users',
 [
@@ -147,14 +186,19 @@ app.post('/users',
  *         schema:
  *           type: string
  *         required: true
- *         description: The user's username
+ *         description: The username of the user who is adding the movie to their list of favorites
  *       - name: MovieID
  *         required: true
- *         description: The movie ID
- *
+ *         description: The ID of the movie to be added to the user's list of favorites
+ *         schema:
+ *           type: string
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       201:
- *         description: The movie was added
+ *         description: The movie was successfully added to the user's list of favorites
+ *       500:
+ *         description: Internal server error
  */
 app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', {session: false}), (req, res) => {
     Users.findOneAndUpdate({ Username: req.params.Username }, {
@@ -190,9 +234,24 @@ app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', {sessi
  *        description: The user's username
  *    requestBody:
  *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              Username:
+ *                type: string
+ *              Password:
+ *                type: string
+ *              Email:
+ *                type: string
+ *              Birthday:
+ *                type: string
  *    responses:
  *      200:
  *        description: The user was updated
+ *      500:
+ *        description: Internal server error
  */
 app.put('/users/:Username', passport.authenticate('jwt', {session: false}),
 [
@@ -238,12 +297,17 @@ app.put('/users/:Username', passport.authenticate('jwt', {session: false}),
 /**
  * @swagger 
  * /:
- * get:
- *  summary: welcome page
- *  tags: [Welcome]
- *  responses:
- *      '200':
- *          description: A succesfull response
+ *  get:
+ *    summary: Get a welcome message from the API
+ *    tags: [Welcome]
+ *    responses:
+ *      200:
+ *        description: A successful response, returning a welcome message
+ *        content:
+ *          text/plain:
+ *            schema:
+ *              type: string
+ *              example: "Welcome to myFlix"
  */
 app.get('/', (req, res) => {
     res.send('Welcome to myFlix');
@@ -253,12 +317,12 @@ app.get('/', (req, res) => {
 /**
  * @swagger 
  * /documentation:
- * get:
- *  summary: returns documentation.html
- * tags: [Documentation]
- *  responses:
- *      '200':
- *          description: A succesfull response
+ *  get:
+ *    summary: Return the documentation page
+ *    tags: [Documentation]
+ *    responses:
+ *      200:
+ *        description: The documentation page was successfully retrieved
  */
 app.get('/documentation', (req, res) => {
     console.log('documentation has been called')
@@ -267,15 +331,24 @@ app.get('/documentation', (req, res) => {
 
 // -> Return a list of ALL movies to the user;
 /**
- * @swagger 
+ * @swagger
  * /movies:
- * get:
- *  summary: Gets list of all movies
- *  tags: [Movies]
- *  responses:
- *      '200':
- *          description: A succesfull response
- *          content: application/json
+ *   get:
+ *     summary: Retrieve a list of all movies
+ *     tags:
+ *       - Movies
+ *     description: This endpoint returns a list of all movies in the database
+ *     responses:
+ *       200:
+ *         description: A successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Movie'
+ *       500:
+ *         description: Internal server error
  */
 app.get('/movies', (req, res) => {
     console.log('movies has been called');
@@ -291,19 +364,28 @@ app.get('/movies', (req, res) => {
 
 // -> Return data (description, genre, director, image URL, whether it’s featured or not) about a single movie by title to the user;
 /**
- * @swagger 
+ * @swagger
  * /movies/{Title}:
- *    get:
- *      summary: Get data about a single movie by title
- *      tags: [Movies]
- *      parameters:
- *          - name: Title
- *            description: Title of movie
- *            schema:
- *              type: string
- *      responses:
- *           200:
- *               description: A successful response
+ *   get:
+ *     summary: Get data about a single movie by title
+ *     tags:
+ *       - Movies
+ *     parameters:
+ *       - name: Title
+ *         in: path
+ *         description: Title of the movie to retrieve
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Successful response, returns data about the specified movie
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Movie'
+ *       500:
+ *         description: An error occurred while processing the request
  */
 app.get('/movies/:Title', passport.authenticate('jwt', {session: false}), (req, res) => {
     console.log('specific movie has been called');
@@ -319,14 +401,52 @@ app.get('/movies/:Title', passport.authenticate('jwt', {session: false}), (req, 
 
 // -> return data on all users
 /**
- * @swagger 
+ * @swagger
  * /users:
- *  get:
- *      summary: Get all users
- *      tags: [Users]
- *      responses:
- *        200:
- *          description: A successful response
+ *   get:
+ *     summary: Get all users
+ *     tags: [Users]
+ *     description: Returns a list of all users in the database.
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: A successful response containing a list of users.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
+ *       500:
+ *         description: Internal server error
+ *  components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       properties:
+ *         Username:
+ *           type: string
+ *           description: The user's username
+ *           example: "johndoe"
+ *         Password:
+ *           type: string
+ *           description: The user's password
+ *           example: "mypassword"
+ *         Email:
+ *           type: string
+ *           description: The user's email
+ *           example: "johndoe@gmail.com"
+ *         Birthday:
+ *           type: string
+ *           description: The user's birthday
+ *           example: "1990-01-01"
+ *         FavoriteMovies:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: The user's favorite movies
+ *           example: ["6091d7e51c47de20bc7c1d94"]
  */
 app.get('/users', passport.authenticate('jwt', {session: false}), (req, res) => {
     console.log('users has been called');
@@ -342,20 +462,55 @@ app.get('/users', passport.authenticate('jwt', {session: false}), (req, res) => 
 
 // -> return data about specific user via username
 /**
- * @swagger 
+ * @swagger
  * /users/{Username}:
- *    get:
- *      summary: Get a user by username
- *      tags: [Users]
- *      parameters:
- *        - name: Username
- *          description: User username
- *          schema:
- *            type: string
- *            format: string
- *      responses:
- *        200:
- *          description: A successful response
+ *   get:
+ *     summary: Get a user by username
+ *     tags: [Users]
+ *     parameters:
+ *       - name: Username
+ *         description: User username
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: A successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ * * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *         Username:
+ *           type: string
+ *         Password:
+ *           type: string
+ *         Email:
+ *           type: string
+ *         Birthday:
+ *           type: string
+ *         Favorites:
+ *           type: array
+ *           items:
+ *             type: string
+ *       required:
+ *         - Username
+ *         - Password
+ *         - Email
+ *         - Birthday
+ *       example:
+ *         Username: exampleuser
+ *         Password: $2a$10$eqoTWaVjKhdJswG7V0RtYOW.1zTNf.91hVJXW/8pN5ZY5a5c5Mv62
+ *         Email: exampleuser@example.com
+ *         Birthday: 1990-01-01
+ *         Favorites: []
  */
 app.get('/users/:Username', passport.authenticate('jwt', {session: false}), (req, res) => {
     console.log(req.params.Username);
@@ -372,12 +527,26 @@ app.get('/users/:Username', passport.authenticate('jwt', {session: false}), (req
 /**
  * @swagger 
  * /directors:
- *    get:
- *      summary: Return all directors 
- *      tags: [Directors]
- *      responses:
- *         200:
- *           description: A successful response
+ *   get:
+ *     summary: Return all directors
+ *     tags:
+ *       - Directors
+ *     description: This endpoint retrieves data on all movie directors.
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: A successful response with data on all directors.
+ *         content:
+ *            application/json:
+ *              schema:
+ *                type: array
+ *                items:
+ *                  $ref: '#/components/schemas/Director'
+ *       500:
+ *         description: An error occurred while retrieving the data.
+ *     security:
+ *       - bearerAuth: []
  */
 app.get('/directors', passport.authenticate('jwt', {session: false}), (req, res) => {
     Directors.find()
@@ -395,16 +564,35 @@ app.get('/directors', passport.authenticate('jwt', {session: false}), (req, res)
  * @swagger 
  * /directors/{Name}:
  *    get:
- *      summary: Return data about a directors (description) by name
+ *      summary: Return data about a director by name
  *      tags: [Directors]
  *      parameters:
  *        - name: Name
- *          description: Name of genre
+ *          description: Name of the director
  *          schema:
  *            type: string
  *      responses:
  *         200:
  *           description: A successful response
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                   Name:
+ *                     type: string
+ *                   Bio:
+ *                     type: string
+ *                   Birth:
+ *                     type: string
+ *                   Death:
+ *                     type: string
+ *                   Movies:
+ *                     type: array 
+ *          500:
+ *           description: An error occurred while retrieving the director data                
  */
 app.get('/directors/:Name', passport.authenticate('jwt', {session: false}), (req, res) => {
     Directors.findOne({Name: req.params.Name})
@@ -427,6 +615,14 @@ app.get('/directors/:Name', passport.authenticate('jwt', {session: false}), (req
  *      responses:
  *         200:
  *           description: A successful response
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: array
+ *                 items:
+ *                   $ref: '#/components/schemas/Genre'
+ *         500:
+ *           description: An error occurred while trying to retrieve the genres
  */
 app.get('/genres', passport.authenticate('jwt', {session: false}), (req, res) => {
     Genres.find()
@@ -438,21 +634,36 @@ app.get('/genres', passport.authenticate('jwt', {session: false}), (req, res) =>
     })
   });
 
-//-< return genre by name via specified genre endpoint
+//-> return genre by name via specified genre endpoint
 /**
  * @swagger 
  * /genres/{Name}:
  *    get:
- *      summary: Return data about a genre (description) by name
+ *      summary: Return data about a genre by name
  *      tags: [Genres]
  *      parameters:
  *        - name: Name
- *          description: Name of genre
+ *          description: Name of the genre
  *          schema:
  *            type: string
  *      responses:
  *         200:
  *           description: A successful response
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                   Name:
+ *                     type: string
+ *                   Description:
+ *                     type: string
+ *                   Movies:
+ *                     type: array 
+ *         500:
+ *           description: An error occurred while processing the request
  */
 app.get('/genres/:Name', passport.authenticate('jwt', {session: false}), (req, res) => {
     Genres.findOne({ Name: req.params.Name })
@@ -482,9 +693,13 @@ app.get('/genres/:Name', passport.authenticate('jwt', {session: false}), (req, r
  *       - name: MovieID
  *         required: true
  *         description: The movie ID
+ *         schema:
+ *           type: string
  *     responses:
  *       202:
  *         description: The movie was deleted
+ *       500:
+ *         description: Internal server error occurred
  */
 app.delete('/users/:Username/movies/:MovieID', passport.authenticate('jwt', {session: false}), (req, res) => {
     Users.findOneAndUpdate(
@@ -518,10 +733,13 @@ app.delete('/users/:Username/movies/:MovieID', passport.authenticate('jwt', {ses
  *           type: string
  *         required: true
  *         description: The user's username
- *
  *     responses:
- *       202:
- *         description: The user was deleted
+ *       200:
+ *         description: User has been deleted.
+ *       400:
+ *         description: User not found.
+ *       500:
+ *         description: Internal server error.
  */
 app.delete('/users/:Username', passport.authenticate('jwt', {session: false}), (req, res) => {
     Users.findOneAndRemove({ Username: req.params.Username })
