@@ -60,17 +60,6 @@ const swaggerOptions = {
                     description: "Production server"
                 } 
             ],
-            basePath: "/",
-            schemes: ["http"],
-            consumes: ["application/json"],
-            produces: ["application/json"],
-            securityDefinitions: {
-                JWT: {
-                    type: "apiKey",
-                    name: "Authorization",
-                    in: "header"
-                }
-            } 
        },
     },
     apis: ["index.js"]
