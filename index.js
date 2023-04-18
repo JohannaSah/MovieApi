@@ -188,7 +188,7 @@ app.post('/users',
  * //  Status: 200 OK
  * //  Body: {"_id":"60b008f9327a713d10aae1cd","Username":"johndoe","Password":"$2b$10$Mj9Xn/x1S8llzW05hLYU6u1J6gi4U6ImQxSC/b5t5Y9IaLr7yQ2Li","Email":"johndoe@example.com","Birthday":"1990-01-01T00:00:00.000Z","FavoriteMovies":["1234567890abcdef","234567890abcdef"]}
  *
- * /
+ */
 app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', {session: false}), (req, res) => {
     Users.findOneAndUpdate({ Username: req.params.Username }, {
        $push: { FavoriteMovies: req.params.MovieID }
@@ -202,9 +202,9 @@ app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', {sessi
         res.json(updatedUser);
       }
     });
-  });
+});
 
- 
+
 // UPDATE
 
 // -> Allow users to update their user info (username);
