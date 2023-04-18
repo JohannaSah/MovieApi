@@ -7,8 +7,8 @@ const express = require('express'),
     uuid = require('uuid'),
     { send } = require('process'),
     mongoose = require('mongoose'),
-    swaggerUi = require('swagger-ui-express'),
-    swaggerJsdoc = require('swagger-jsdoc'),
+    // swaggerUi = require('swagger-ui-express'),
+    // swaggerJsdoc = require('swagger-jsdoc'),
     Models = require('./models.js'),
     Movies = Models.Movie,
     Users = Models.User,
@@ -44,41 +44,41 @@ const accessLogStream = fs.createWriteStream(path.join(__dirname, "log.txt"), {
 app.use(express.static('public'));
 app.use(morgan('combined', {stream: accessLogStream}));
 
-const swaggerOptions = {
-    swaggerDefinition: {
-       info: {
-            title: "myFlix API",
-            description: "API for managing movies, genres, directors, and user profiles",
-            version: "1.0.0",
-            servers: [
-                { 
-                    url: "http://localhost:8080",
-                    description: "Local server"
-                },
-                { 
-                    url: 'https://movieapi-dcj2.onrender.com/',
-                    description: "Production server"
-                } 
-            ],
-            basePath: "/",
-            schemes: ["http"],
-            consumes: ["application/json"],
-            produces: ["application/json"],
-            securityDefinitions: {
-                JWT: {
-                    type: "apiKey",
-                    name: "Authorization",
-                    in: "header"
-                }
-            } 
-       },
-    },
-    apis: ["index.js"]
-};
+// const swaggerOptions = {
+//     swaggerDefinition: {
+//        info: {
+//             title: "myFlix API",
+//             description: "API for managing movies, genres, directors, and user profiles",
+//             version: "1.0.0",
+//             servers: [
+//                 { 
+//                     url: "http://localhost:8080",
+//                     description: "Local server"
+//                 },
+//                 { 
+//                     url: 'https://movieapi-dcj2.onrender.com/',
+//                     description: "Production server"
+//                 } 
+//             ],
+//             basePath: "/",
+//             schemes: ["http"],
+//             consumes: ["application/json"],
+//             produces: ["application/json"],
+//             securityDefinitions: {
+//                 JWT: {
+//                     type: "apiKey",
+//                     name: "Authorization",
+//                     in: "header"
+//                 }
+//             } 
+//        },
+//     },
+//     apis: ["index.js"]
+// };
 
- const swaggerDocs = swaggerJsdoc(swaggerOptions);
+//  const swaggerDocs = swaggerJsdoc(swaggerOptions);
  
- app.use("/api-documentation", swaggerUi.serve, swaggerUi.setup(swaggerDocs)); 
+//  app.use("/api-documentation", swaggerUi.serve, swaggerUi.setup(swaggerDocs)); 
 
 
  // Your API routes here
