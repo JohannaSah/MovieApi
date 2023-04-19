@@ -21,7 +21,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const cors = require('cors');
-let allowedOrigins = ['http://localhost:1234', 'http://localhost:4200', 'https://myflixjs.netlify.app', 'http://localhost:8080', 'https://movieapi-dcj2.onrender.com/', 'https://johannasah.github.io/myFlix-Angular-client/', 'https://johannasah.github.io/myFlix-Angular-client/welcome']; // list of allowed domains
+let allowedOrigins = ['http://localhost:1234', 'http://localhost:4200', 'https://myflixjs.netlify.app', 'http://localhost:8080', 'https://johannasah.github.io/myFlix-Angular-client/', 'https://johannasah.github.io']; // list of allowed domains
 app.use(cors({
     origin:(origin, callback) => {
         if (!origin) return callback(null, true);
@@ -33,7 +33,7 @@ app.use(cors({
     }
 }));
 
-let auth = require('./auth')(app); // (app) ensures, that Express is available in auth.js file as well
+require('./auth')(app); // (app) ensures, that Express is available in auth.js file as well
 const passport = require('passport'); // require passport module
 require('./passport'); // import passport.js file
 
